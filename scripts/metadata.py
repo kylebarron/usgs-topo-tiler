@@ -13,8 +13,7 @@ import requests
     default=None,
     show_default=True,
     type=str,
-    help='Bounding box. Must be provided in a string as "minx,miny,maxx,maxy"'
-)
+    help='Bounding box. Must be provided in a string as "minx,miny,maxx,maxy"')
 def main(bbox):
     """Download Topo metadata
     """
@@ -35,7 +34,7 @@ def main(bbox):
     params['max'] = 1000
     n_requests = math.ceil(total / 1000)
     for i in range(n_requests):
-        print(f'{i}/{n_requests}', file=sys.stderr)
+        print(f'{i + 1}/{n_requests}', file=sys.stderr)
 
         params['offset'] = i * 1000
 

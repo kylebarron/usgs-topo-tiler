@@ -53,10 +53,10 @@ def main(file):
         minzoom=11,
         maxzoom=16,
         asset_filter=asset_filter,
-        accessor=lambda f: f['properties']['downloadURL'],
+        accessor=path_accessor,
         filter_preference=filter_preference)
 
-    print(json.dumps(mosaic.to_dict(), separators=(',', ':')))
+    print(json.dumps(mosaic.dict(), separators=(',', ':')))
 
 
 def load_features(file):

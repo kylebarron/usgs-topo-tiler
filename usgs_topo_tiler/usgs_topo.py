@@ -52,7 +52,7 @@ def tile(
         tile_z: int,
         tilesize: int = 256,
         **kwargs: Any,
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.array]:
     """
     Create mercator tile from any images.
     Attributes

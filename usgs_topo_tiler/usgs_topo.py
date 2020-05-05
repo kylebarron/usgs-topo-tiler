@@ -10,6 +10,8 @@ from rio_tiler import reader
 
 
 def get_containing_quad(minx, miny, maxx, maxy):
+    """Get Quadrangle within image bounds
+    """
     minx = minx + (abs(minx) % .125)
     miny = miny - (miny % .125) + .125
     maxx = maxx + (abs(maxx) % .125) - .125
@@ -18,6 +20,13 @@ def get_containing_quad(minx, miny, maxx, maxy):
 
 
 def get_cutline(r):
+    """Get cutline to remove collar from image
+
+    Cutline is in _image_ coordinates.
+
+    Args:
+        - r: opened rasterio dataset
+    """
     # Convert image bounds to wgs84
     image_wgs_bounds = transform_bounds(r.crs, CRS.from_epsg(4326), *r.bounds)
 
@@ -36,9 +45,10 @@ def get_cutline(r):
     crs_height = image_bounds[3] - image_bounds[1]
     img_height = r.height
 
+    # Origin is in the top left
     left = round(buffers[0] / crs_width * img_width)
-    bottom = r.height - round(buffers[1] / crs_height * img_height)
-    right = r.width - round(buffers[2] / crs_width * img_width)
+    bottom = img_height - round(buffers[1] / crs_height * img_height)
+    right = img_width - round(buffers[2] / crs_width * img_width)
     top = round(buffers[3] / crs_height * img_height)
 
     wkt = f'POLYGON (({left} {top}, {left} {bottom}, {right} {bottom}, {right} {top}))'

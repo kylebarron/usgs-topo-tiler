@@ -19,7 +19,7 @@ extra_reqs = {
 
 setup(
     name="usgs-topo-tiler",
-    version="0.1.0",
+    version="0.1.1",
     description="rio-tiler plugin to read mercator tiles from USGS Topo Quads",
     long_description=readme,
     long_description_content_type="text/markdown",

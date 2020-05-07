@@ -47,6 +47,7 @@ def asset_filter(tile, intersect_dataset, intersect_geoms, **kwargs):
     '--preference',
     type=click.Choice(['latest', 'earliest'], case_sensitive=False),
     default='latest',
+    show_default=True,
     help='Selection preference.')
 @click.argument('file', type=click.File())
 def main(preference, file):

@@ -7,8 +7,7 @@ from urllib.parse import unquote, urlparse
 import click
 from cogeo_mosaic.mosaic import MosaicJSON
 from dateutil.parser import parse as date_parse
-from rtree import index
-from shapely.geometry import asShape, box, mapping
+from shapely.geometry import box, mapping
 
 
 def path_accessor(feature):
@@ -24,29 +23,33 @@ def asset_filter(tile, intersect_dataset, intersect_geoms, **kwargs):
     """
     preference = kwargs.get('filter_preference', 'latest')
 
-    all_bounds = set()
-    tree = index.Index()
-    for idx, obj in enumerate(intersect_dataset):
-        bounds = asShape(obj['geometry']).bounds
-        all_bounds.add(bounds)
-        tree.insert(idx, bounds)
-
+    quad_coords_set = {f['geometry']['coordinates'] for f in intersect_dataset}
     result_dataset = []
-    for bd in all_bounds:
-        items = [intersect_dataset[i] for i in tree.intersection(bd)]
+    for quad_coords in quad_coords_set:
+        quad_features = [
+            f for f in intersect_dataset
+            if f['geometry']['coordinates'] == quad_coords]
 
-        # Keep one:
         if preference == 'latest':
-            item = max(items, key=lambda x: x['properties']['publicationDate'])
+            item = max(
+                quad_features, key=lambda x: x['properties']['publicationDate'])
+            result_dataset.append(item)
+        elif preference == 'earliest':
+            item = min(
+                quad_features, key=lambda x: x['properties']['publicationDate'])
             result_dataset.append(item)
 
     return result_dataset
 
 
 @click.command()
+@click.option(
+    '--preference',
+    type=click.Choice(['latest', 'earliest'], case_sensitive=False),
+    default='latest',
+    help='Selection preference.')
 @click.argument('file', type=click.File())
-def main(file):
-    filter_preference = 'latest'
+def main(preference, file):
     features = load_features(file)
     mosaic = MosaicJSON.from_features(
         features,
@@ -54,7 +57,8 @@ def main(file):
         maxzoom=16,
         asset_filter=asset_filter,
         accessor=path_accessor,
-        filter_preference=filter_preference)
+        filter_preference=preference,
+    )
 
     print(json.dumps(mosaic.dict(), separators=(',', ':')))
 

@@ -2,7 +2,7 @@
 Create mosaic from metadata
 """
 import json
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 import click
 from cogeo_mosaic.mosaic import MosaicJSON
@@ -15,7 +15,7 @@ def path_accessor(feature):
     url = feature['properties']['downloadURL']
     parsed = urlparse(url)
     bucket = parsed.netloc.split('.')[0]
-    key = parsed.path
+    key = unquote(parsed.path)
     return f's3://{bucket}{key}'
 
 

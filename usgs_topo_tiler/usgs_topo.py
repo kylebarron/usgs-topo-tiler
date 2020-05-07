@@ -46,10 +46,10 @@ def get_cutline(r):
     img_height = r.height
 
     # Origin is in the top left
-    left = round(buffers[0] / crs_width * img_width)
-    bottom = img_height - round(buffers[1] / crs_height * img_height)
-    right = img_width - round(buffers[2] / crs_width * img_width)
-    top = round(buffers[3] / crs_height * img_height)
+    left = buffers[0] / crs_width * img_width
+    bottom = img_height - buffers[1] / crs_height * img_height
+    right = img_width - buffers[2] / crs_width * img_width
+    top = buffers[3] / crs_height * img_height
 
     wkt = f'POLYGON (({left} {top}, {left} {bottom}, {right} {bottom}, {right} {top}))'
     return wkt

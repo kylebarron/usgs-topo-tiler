@@ -5,6 +5,7 @@ import json
 from urllib.parse import unquote, urlparse
 
 import click
+import requests
 from cogeo_mosaic.mosaic import MosaicJSON
 from dateutil.parser import parse as date_parse
 from shapely.geometry import box, mapping
@@ -21,7 +22,8 @@ def path_accessor(feature):
 def asset_filter(tile, intersect_dataset, intersect_geoms, **kwargs):
     """Custom filter
     """
-    preference = kwargs.get('filter_preference', 'latest')
+    preference = kwargs.get('preference', 'latest')
+    check_exists = kwargs.get('check_exists', False)
 
     quad_coords_set = {f['geometry']['coordinates'] for f in intersect_dataset}
     result_dataset = []
@@ -31,13 +33,27 @@ def asset_filter(tile, intersect_dataset, intersect_geoms, **kwargs):
             if f['geometry']['coordinates'] == quad_coords]
 
         if preference == 'latest':
-            item = max(
-                quad_features, key=lambda x: x['properties']['publicationDate'])
-            result_dataset.append(item)
+            quad_features = sorted(
+                quad_features,
+                key=lambda x: x['properties']['publicationDate'],
+                reverse=True)
         elif preference == 'earliest':
-            item = min(
+            quad_features = sorted(
                 quad_features, key=lambda x: x['properties']['publicationDate'])
-            result_dataset.append(item)
+        else:
+            raise ValueError(f'Invalid preference: {preference}')
+
+        # Check that file actually exists
+        if check_exists:
+            for item in quad_features:
+                url = item['properties']['downloadURL']
+                r = requests.head(url)
+                if r.status_code == 200:
+                    break
+        else:
+            item = quad_features[0]
+
+        result_dataset.append(item)
 
     return result_dataset
 
@@ -49,8 +65,13 @@ def asset_filter(tile, intersect_dataset, intersect_geoms, **kwargs):
     default='latest',
     show_default=True,
     help='Selection preference.')
+@click.option(
+    '--check-exists/--no-check-exists',
+    default=False,
+    show_default=True,
+    help='Perform HEAD request on every selected image to ensure it exists')
 @click.argument('file', type=click.File())
-def main(preference, file):
+def main(preference, check_exists, file):
     features = load_features(file)
     mosaic = MosaicJSON.from_features(
         features,
@@ -58,8 +79,8 @@ def main(preference, file):
         maxzoom=16,
         asset_filter=asset_filter,
         accessor=path_accessor,
-        filter_preference=preference,
-    )
+        check_exists=check_exists,
+        preference=preference)
 
     print(json.dumps(mosaic.dict(), separators=(',', ':')))
 

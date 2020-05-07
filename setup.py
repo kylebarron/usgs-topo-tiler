@@ -10,12 +10,7 @@ inst_reqs = ["numpy", "rasterio", "rio-tiler>=2.0a5"]
 
 extra_reqs = {
     "scripts": [
-        "click",
-        "cogeo_mosaic",
-        "python-dateutil",
-        "requests",
-        "rtree",
-        "shapely", ]}
+        "click", "cogeo_mosaic", "python-dateutil", "requests", "shapely"]}
 
 setup(
     name="usgs-topo-tiler",

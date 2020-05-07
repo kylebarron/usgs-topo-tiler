@@ -1,0 +1,14 @@
+name: usgs-topo-tiler
+channels:
+  - conda-forge
+dependencies:
+  - rasterio
+  - numpy
+  - click
+  - python-dateutil
+  - requests
+  - shapely
+  - pip
+  - pip:
+    - rio-tiler>=2.0a5
+    - cogeo-mosaic>=3.0a2

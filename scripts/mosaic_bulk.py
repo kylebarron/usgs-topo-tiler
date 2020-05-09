@@ -68,9 +68,15 @@ s3_list_path = '../data/geotiff_files.txt'
     default=False,
     show_default=True,
 )
+@click.option(
+    '--bbox',
+    type=str,
+    default=None,
+    show_default=True,
+    help='Bounding box for mosaic. Must be of format "minx,miny,maxx,maxy"')
 def main(
         meta_path, s3_list_path, min_scale, max_scale, min_year, max_year,
-        woodland_tint, allow_orthophoto):
+        woodland_tint, allow_orthophoto, bbox):
     df = pd.read_csv(path, low_memory=False)
 
     # Keep only historical maps
@@ -109,6 +115,11 @@ def main(
 
     df['geometry'] = df.apply(construct_geometry, axis=1)
     gdf = gpd.GeoDataFrame(df)
+
+    # Filter within provided bounding box
+    if bbox:
+        bbox = box(*map(float, bbox.split(',')))
+        gdf = gdf[gdf.geometry.intersects(bbox)]
 
     # Filter (sort) by desired scale
     # What to do when assets don't exist for a given scale?

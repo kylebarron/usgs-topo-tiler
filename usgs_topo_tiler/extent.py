@@ -72,7 +72,7 @@ def _get_extent(bounds: List[float], offset_x: float,
     return [minx, miny, maxx, maxy]
 
 
-def get_extent(bounds: List[float], url: str) -> List[float]:
+def estimate_extent(bounds: List[float], url: str) -> List[float]:
     """Get extent of image without collar
 
     Args:

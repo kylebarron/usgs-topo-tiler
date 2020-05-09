@@ -288,6 +288,13 @@ CUSTOM_TEST_CASES = [
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Sitka%20D-5_359166_1948_63360_geo.tif',
         [-135.66666669999998, 57.75, -135.33333330000002, 58], 63360, ''],
+    # Tests right on boundary
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Mount%20Katmai%20D-4_357744_1951_63360_geo.tif',
+        [-155.33333330000002, 58.75, -155, 59], 63360, ''],
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Iliamna%20A-6_356232_1951_63360_geo.tif',
+        [-155.25, 59, -154.875, 59.25], 63360, ''],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Tyonek%20A-1_359987_1951_63360_geo.tif',
         [-150.375, 61, -150, 61.25], 63360, ''],
@@ -301,7 +308,7 @@ CUSTOM_TEST_CASES = [
 
 @pytest.mark.parametrize(
     "url,map_bounds,scale,grid_size",
-    [*AUTOMATED_TEST_CASES, *CUSTOM_TEST_CASES])
+    [*CUSTOM_TEST_CASES, *AUTOMATED_TEST_CASES])
 def test_extent(url, map_bounds, scale, grid_size):
     with rasterio.open(url) as r:
         # Convert image bounds to wgs84

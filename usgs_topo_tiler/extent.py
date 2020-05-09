@@ -103,17 +103,17 @@ def _get_offset_63360(bounds: List[float]) -> List[float]:
     maxy = bounds[3]
 
     # Lower 48
-    if maxy <= 49:
+    if maxy < 49.25:
         return [.25, .25]
 
     # Sections of Alaska
-    if maxy <= 59:
+    if maxy < 59.25:
         return [1 / 3, .25]
 
-    if maxy <= 62:
+    if maxy < 62.25:
         return [.375, .25]
 
-    if maxy <= 68:
+    if maxy < 68.25:
         return [.5, .25]
 
     # Each map has a width of .6

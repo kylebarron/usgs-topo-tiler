@@ -21,7 +21,6 @@ SCALE_DEGREE_OFFSET_XW = {
     48000: .125,
     50000: .25,
     62500: .125,
-    63360: .25,
     96000: .25,
     100000: .5,
     125000: .5,
@@ -40,15 +39,16 @@ def parse_scale(url: str) -> int:
     return int(match.group(1))
 
 
-def _get_extent(bounds: List[float], offset: float) -> List[float]:
+def _get_extent(bounds: List[float], offset_x: float,
+                offset_y: float) -> List[float]:
     """Get extent of image without collar
     """
     minx, miny, maxx, maxy = bounds
 
-    minx = minx + (abs(minx) % offset)
-    miny = miny - (miny % offset) + offset
-    maxx = maxx + (abs(maxx) % offset) - offset
-    maxy = maxy - (maxy % offset)
+    minx = minx + (abs(minx) % offset_x)
+    miny = miny - (miny % offset_y) + offset_y
+    maxx = maxx + (abs(maxx) % offset_x) - offset_x
+    maxy = maxy - (maxy % offset_y)
     return [minx, miny, maxx, maxy]
 
 
@@ -60,5 +60,20 @@ def get_extent(bounds: List[float], url: str) -> List[float]:
         - url: url to COG on S3
     """
     scale = parse_scale(url)
-    offset = SCALE_DEGREE_OFFSET_XW[scale]
-    return _get_extent(bounds, offset)
+    offset_x, offset_y = get_offsets(bounds, scale)
+    return _get_extent(bounds, offset_x, offset_y)
+
+
+def get_offsets(bounds, scale):
+    easy_offset = SCALE_DEGREE_OFFSET_XW.get(scale)
+    if easy_offset:
+        return [easy_offset, easy_offset]
+
+    # Custom cases
+    if scale == 63360:
+        return _get_offset_63360(bounds)
+
+
+def _get_offset_63360(bounds):
+    """Custom cases for scale==63360"""
+    pass

@@ -1,7 +1,8 @@
 """usgs_topo_tiler.grid: Find bounds of image not including collar."""
 
 import re
-from typing import List
+from typing import Dict, List
+from urllib.parse import unquote
 
 # Mapping from image scale to the minimum possible offset
 # This is created by looking at the cross tabulation of grid size by scale. For
@@ -28,15 +29,35 @@ SCALE_DEGREE_OFFSET_XW = {
     250000: .5}
 
 
-def parse_scale(url: str) -> int:
-    """Parse scale from url
+def parse_url(url: str) -> int:
+    """Parse metadata from url
 
     Args
         - url: Asset url
     """
-    regex = r'(\d+)\_[a-zA-Z]*\.tif$'
-    match = re.search(regex, url)
-    return int(match.group(1))
+    fname = unquote(url).split('/')[-1]
+
+    regex = (
+        r'^(?P<state>[A-Z]{2})_'
+        r'(?P<map_name>.*)_'
+        r'(?P<map_id>\d+)_'
+        r'(?P<year>\d{4})_'
+        r'(?P<scale>\d+)'
+        r'\_[a-zA-Z]*\.tif$')
+
+    match = re.search(regex, fname)
+
+    map_name = match.group('map_name')
+    map_id = int(match.group('map_id'))
+    state = match.group('state')
+    year = int(match.group('year'))
+    scale = int(match.group('scale'))
+    return {
+        'scale': scale,
+        'year': year,
+        'state': state,
+        'map_id': map_id,
+        'map_name': map_name}
 
 
 def _get_extent(bounds: List[float], offset_x: float,
@@ -59,12 +80,13 @@ def get_extent(bounds: List[float], url: str) -> List[float]:
         - bounds: opened rasterio dataset
         - url: url to COG on S3
     """
-    scale = parse_scale(url)
-    offset_x, offset_y = get_offsets(bounds, scale)
+    meta = parse_url(url)
+    offset_x, offset_y = get_offsets(bounds, meta, url)
     return _get_extent(bounds, offset_x, offset_y)
 
 
-def get_offsets(bounds, scale):
+def get_offsets(bounds: List[float], meta: Dict, url: str) -> List[float]:
+    scale = meta['scale']
     easy_offset = SCALE_DEGREE_OFFSET_XW.get(scale)
     if easy_offset:
         return [easy_offset, easy_offset]
@@ -74,7 +96,7 @@ def get_offsets(bounds, scale):
         return _get_offset_63360(bounds)
 
 
-def _get_offset_63360(bounds):
+def _get_offset_63360(bounds: List[float]) -> List[float]:
     """Custom cases for scale==63360"""
     maxy = bounds[3]
 

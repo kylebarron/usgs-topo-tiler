@@ -1,5 +1,6 @@
 from urllib.parse import unquote
 
+import click
 import geopandas as gpd
 import pandas as pd
 from keplergl_cli import Visualize
@@ -12,27 +13,104 @@ s3_list_path = '../data/geotiff_files.txt'
 # CA_Acton_302201_1959_24000_geo.tif
 # CA_Acton_302202_1959_24000_geo.tif
 
-
 # TODO: option for high scale, medium scale, low scale
 # High scale: 24k, Medium scale: 63k, low scale: 250k
-def main(meta_path, s3_list_path):
+
+
+@click.command()
+@click.option(
+    '--meta-path',
+    type=click.Path(exists=True, readable=True),
+    required=True,
+    help='Path to csv file of USGS bulk metadata dump from S3')
+@click.option(
+    '--s3-list-path',
+    type=click.Path(exists=True, readable=True),
+    required=False,
+    default=None,
+    show_default=True,
+    help='Path to txt file of list of s3 GeoTIFF files')
+@click.option(
+    '--min-scale',
+    type=float,
+    required=False,
+    default=None,
+    show_default=True,
+    help='Minimum map scale, inclusive')
+@click.option(
+    '--max-scale',
+    type=float,
+    required=False,
+    default=None,
+    show_default=True,
+    help='Maximum map scale, inclusive')
+@click.option(
+    '--min-year',
+    type=float,
+    required=False,
+    default=None,
+    show_default=True,
+    help='Minimum map year, inclusive')
+@click.option(
+    '--max-year',
+    type=float,
+    required=False,
+    default=None,
+    show_default=True,
+    help='Maximum map year, inclusive')
+@click.option(
+    '--woodland-tint/--no-woodland-tint',
+    is_flag=True,
+    default=None,
+    required=False,
+    help=
+    'Filter on woodland tint or no woodland tint. By default no filtering is applied.'
+)
+@click.option(
+    '--allow-orthophoto',
+    is_flag=True,
+    help='Allow orthophoto',
+    default=False,
+    show_default=True,
+)
+def main(
+        meta_path, s3_list_path, min_scale, max_scale, min_year, max_year,
+        woodland_tint, allow_orthophoto):
     df = pd.read_csv(path, low_memory=False)
 
     # Keep only historical maps
     # Newer maps are only in GeoPDF, and not in GeoTIFF, let alone COG
     df = df[df['Series'] == 'HTMC']
 
+    # Apply filters
+    if min_scale:
+        df = df[df['Scale'] >= min_scale]
+    if max_scale:
+        df = df[df['Scale'] <= max_scale]
+    if min_year:
+        df = df[df['Date On Map'] >= min_year]
+    if max_year:
+        df = df[df['Date On Map'] <= max_year]
+    if woodland_tint is not None:
+        if woodland_tint:
+            df = df[df['Woodland Tint'] == 'Y']
+        else:
+            df = df[df['Woodland Tint'] == 'N']
+    if not allow_orthophoto:
+        df = df[df['Orthophoto'].isna()]
+
     df['geometry'] = df.apply(construct_geometry, axis=1)
     gdf = gpd.GeoDataFrame(df)
-
-    # Load list of GeoTIFF files
-    s3_files_df = load_s3_list(s3_list_path)
 
     # Create s3 GeoTIFF paths from metadata
     gdf['s3_tif'] = construct_s3_tif_url(gdf['Download Product S3'])
 
-    # Keep only files that exist as GeoTIFF
-    gdf = filter_cog_exists(gdf, s3_files_df)
+    if s3_list_path:
+        # Load list of GeoTIFF files
+        s3_files_df = load_s3_list(s3_list_path)
+
+        # Keep only files that exist as GeoTIFF
+        gdf = filter_cog_exists(gdf, s3_files_df)
 
     # Filter (sort) by desired scale
     # What to do when assets don't exist for a given scale?
@@ -100,6 +178,7 @@ def filter_cog_exists(gdf, s3_files_df):
     """Filter rows to include only GeoTIFF files that exist on S3
     """
     return gdf.merge(
-        s3_files_df, how='inner', left_on='s3_tif', right_on='path')
+        s3_files_df, how='inner', left_on='s3_tif', right_on='path').drop(
+            'path', axis=1)
 
 

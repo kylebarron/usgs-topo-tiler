@@ -97,18 +97,18 @@ def main(
     if not allow_orthophoto:
         df = df[df['Orthophoto'].isna()]
 
-    df['geometry'] = df.apply(construct_geometry, axis=1)
-    gdf = gpd.GeoDataFrame(df)
-
     # Create s3 GeoTIFF paths from metadata
-    gdf['s3_tif'] = construct_s3_tif_url(gdf['Download Product S3'])
+    df['s3_tif'] = construct_s3_tif_url(df['Download Product S3'])
 
     if s3_list_path:
         # Load list of GeoTIFF files
         s3_files_df = load_s3_list(s3_list_path)
 
         # Keep only files that exist as GeoTIFF
-        gdf = filter_cog_exists(gdf, s3_files_df)
+        df = filter_cog_exists(df, s3_files_df)
+
+    df['geometry'] = df.apply(construct_geometry, axis=1)
+    gdf = gpd.GeoDataFrame(df)
 
     # Filter (sort) by desired scale
     # What to do when assets don't exist for a given scale?
@@ -172,10 +172,10 @@ def construct_s3_tif_url(series: pd.Series) -> pd.Series:
     return paths
 
 
-def filter_cog_exists(gdf, s3_files_df):
+def filter_cog_exists(df, s3_files_df):
     """Filter rows to include only GeoTIFF files that exist on S3
     """
-    return gdf.merge(
+    return df.merge(
         s3_files_df, how='inner', left_on='s3_tif', right_on='path').drop(
             'path', axis=1)
 

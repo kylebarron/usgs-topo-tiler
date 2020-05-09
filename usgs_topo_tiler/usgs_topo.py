@@ -1,6 +1,6 @@
 """usgs_topo_tiler.usgs_topo: USGS Historical topo processing."""
 
-from typing import Any, Tuple
+from typing import Any, List, Tuple
 
 import numpy as np
 import rasterio
@@ -18,6 +18,7 @@ def tile(
         tile_y: int,
         tile_z: int,
         tilesize: int = 256,
+        map_bounds: List[float] = None,
         **kwargs: Any,
 ) -> Tuple[np.ndarray, np.array]:
     """
@@ -34,6 +35,9 @@ def tile(
             Mercator tile ZOOM level.
         tilesize : int, optional (default: 256)
             Output image size.
+        map_bounds : List[float], optional (default: inferred)
+            Bounds of map excluding border in WGS84
+            Normal order: (minx, miny, maxx, maxy)
         kwargs: dict, optional
             These will be passed to the 'rio_tiler.reader.tile' function.
     Returns
@@ -47,8 +51,9 @@ def tile(
             src_dst.crs, CRS.from_epsg(4326), *src_dst.bounds)
 
         # Get extent and cutline
-        quad_wgs_bounds = get_extent(image_wgs_bounds, address)
-        cutline = get_cutline(src_dst, quad_wgs_bounds)
+        if not map_bounds:
+            map_bounds = get_extent(image_wgs_bounds, address)
+        cutline = get_cutline(src_dst, map_bounds)
 
         return reader.tile(
             src_dst,

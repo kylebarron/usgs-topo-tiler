@@ -4,8 +4,12 @@ from typing import Any, Tuple
 
 import numpy as np
 import rasterio
+from rasterio.crs import CRS
+from rasterio.warp import transform_bounds
 from rio_tiler import reader
+
 from usgs_topo_tiler.cutline import get_cutline
+from usgs_topo_tiler.extent import get_extent
 
 
 def tile(
@@ -38,7 +42,14 @@ def tile(
         mask : np array
     """
     with rasterio.open(address) as src_dst:
-        cutline = get_cutline(src_dst)
+        # Convert image bounds to wgs84
+        image_wgs_bounds = transform_bounds(
+            src_dst.crs, CRS.from_epsg(4326), *src_dst.bounds)
+
+        # Get extent and cutline
+        quad_wgs_bounds = get_extent(image_wgs_bounds, address)
+        cutline = get_cutline(src_dst, quad_wgs_bounds)
+
         return reader.tile(
             src_dst,
             tile_x,

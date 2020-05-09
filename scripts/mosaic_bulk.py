@@ -3,15 +3,10 @@ from urllib.parse import unquote
 import click
 import geopandas as gpd
 import pandas as pd
-from keplergl_cli import Visualize
 from shapely.geometry import box
 
 path = '../data/topomaps_all/topomaps_all.csv'
 s3_list_path = '../data/geotiff_files.txt'
-
-# TODO: Add filters for topographic, woodland tint. Some maps made at the same time with neighboring ids are quite different, e.g.
-# CA_Acton_302201_1959_24000_geo.tif
-# CA_Acton_302202_1959_24000_geo.tif
 
 # TODO: option for high scale, medium scale, low scale
 # High scale: 24k, Medium scale: 63k, low scale: 250k
@@ -82,15 +77,18 @@ def main(
     # Newer maps are only in GeoPDF, and not in GeoTIFF, let alone COG
     df = df[df['Series'] == 'HTMC']
 
+    # Create year column as Imprint Year if it exists, otherwise Date On Map
+    df['year'] = df['Imprint Year'].fillna(df['Date On Map'])
+
     # Apply filters
     if min_scale:
         df = df[df['Scale'] >= min_scale]
     if max_scale:
         df = df[df['Scale'] <= max_scale]
     if min_year:
-        df = df[df['Date On Map'] >= min_year]
+        df = df[df['Year'] >= min_year]
     if max_year:
-        df = df[df['Date On Map'] <= max_year]
+        df = df[df['Year'] <= max_year]
     if woodland_tint is not None:
         if woodland_tint:
             df = df[df['Woodland Tint'] == 'Y']

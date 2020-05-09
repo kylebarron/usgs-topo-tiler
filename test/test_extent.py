@@ -11,278 +11,277 @@ from usgs_topo_tiler.extent import get_extent
 AUTOMATED_TEST_CASES = [
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/FL/FL_Fort%20Pierce_346296_1972_10000_geo.tif',
-        [-80.35, 27.4166667, -80.266667, 27.5], 10000],
+        [-80.35, 27.4166667, -80.266667, 27.5], 10000, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PR/PR_Rosario_362248_1964_20000_geo.tif',
-        [-67.125, 18.125, -67.0, 18.25], 20000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PR/PR_Comerio_362094_1957_20000_geo.tif',
+        [-66.25, 18.125, -66.125, 18.25], 20000, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Torrance_299925_1934_20000_geo.tif',
-        [-118.43333329999999, 33.8, -118.3, 33.9], 20000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PR/PR_San%20German_362261_1966_20000_geo.tif',
+        [-67.125, 18.0, -67.0, 18.125], 20000, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PR/PR_Arecibo_362029_1964_20000_geo.tif',
-        [-66.75, 18.375, -66.625, 18.5], 20000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PR/PR_Mayaguez_362154_1955_20000_geo.tif',
+        [-67.25, 18.125, -67.125, 18.25], 20000, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/SC/SC_Bulls%20Island_260669_1919_21120_geo.tif',
-        [-79.625, 32.875, -79.5, 33.0], 21120],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/SC/SC_Capers%20Island_260671_1919_21120_geo.tif',
+        [-79.75, 32.75, -79.625, 32.875], 21120, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/SC/SC_Melgrove_260683_1919_21120_geo.tif',
-        [-80.0, 32.875, -79.875, 33.0], 21120],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/SC/SC_Charleston_260673_1919_21120_geo.tif',
+        [-80.0, 32.75, -79.875, 32.875], 21120, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/SC/SC_The%20Jetties_260686_1919_21120_geo.tif',
-        [-79.875, 32.625, -79.75, 32.75], 21120],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/SC/SC_Sewee%20Bay_260685_1919_21120_geo.tif',
+        [-79.75, 32.875, -79.625, 33.0], 21120, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Big%20Maria%20Mts%20SE_288400_1955_24000_geo.tif',
-        [-114.625, 33.75, -114.5, 33.875], 24000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TN/TN_Clouds_149552_1952_24000_geo.tif',
+        [-83.75, 36.375, -83.625, 36.5], 24000, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/IL/IL_Park%20Ridge_308431_1963_24000_geo.tif',
-        [-87.875, 42.0, -87.75, 42.125], 24000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AZ/AZ_Mount%20Bigelow_312482_1996_24000_geo.tif',
+        [-110.75, 32.375, -110.625, 32.5], 24000, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MS/MS_Leland_335987_1967_24000_geo.tif',
-        [-91.0, 33.375, -90.875, 33.5], 24000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MN/MN_Campbell_504118_1981_24000_geo.tif',
+        [-96.5, 46.0, -96.375, 46.125], 24000, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MA/MA_Marblehead%20North_351077_1977_25000_geo.tif',
-        [-70.875, 42.5, -70.75, 42.625], 25000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/SD/SD_Hay%20Canyon%20Butte_344574_1982_25000_geo.tif',
+        [-103.125, 43.25, -103.0, 43.375], 25000, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MI/MI_Cooperton_277603_1983_25000_geo.tif',
-        [-84.875, 44.125, -84.75, 44.25], 25000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/VA/VA_Petersburg_187345_1949_25000_geo.tif',
+        [-77.5, 37.125, -77.375, 37.25], 25000, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MA/MA_Norwood_351182_1947_25000_geo.tif',
-        [-71.25, 42.125, -71.125, 42.25], 25000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MA/MA_Springfield%20North_463077_1972_25000_geo.tif',
+        [-72.625, 42.125, -72.5, 42.25], 25000, '7.5 X 7.5 Minute'],
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PR/PR_Coamo_362385_1946_30000_geo.tif',
+        [-66.375, 18.0, -66.25, 18.125], 30000, '7.5 X 7.5 Minute'],
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PR/PR_Cabo%20Rojo_362346_1938_30000_geo.tif',
+        [-67.25, 17.875, -67.125, 18.0], 30000, '7.5 X 7.5 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PR/PR_Bayaney_362345_1952_30000_geo.tif',
-        [-66.875, 18.25, -66.75, 18.375], 30000],
+        [-66.875, 18.25, -66.75, 18.375], 30000, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PR/PR_Yauco_362605_1946_30000_geo.tif',
-        [-66.875, 18.0, -66.75, 18.125], 30000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/NY/NY_Cleveland_8034260_1944_31680_geo.tif',
+        [-76.0, 43.125, -75.875, 43.25], 31680, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PR/PR_Aguas%20Buenas_362323_1952_30000_geo.tif',
-        [-66.125, 18.25, -66.0, 18.375], 30000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Patterson_296401_1916_31680_geo.tif',
+        [-121.25, 37.375, -121.125, 37.5], 31680, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TX/TX_Fowlkes_108284_1919_31680_geo.tif',
-        [-98.875, 33.875, -98.75, 34.0], 31680],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/LA/LA_Luling_333934_1935_31680_geo.tif',
+        [-90.375, 29.875, -90.25, 30.0], 31680, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MA/MA_Mt%20Toby_463003_1944_31680_geo.tif',
-        [-72.625, 42.375, -72.5, 42.5], 31680],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TX/TX_Haskell%203-b_128387_1925_48000_geo.tif',
+        [-100.0, 33.125, -99.875, 33.25], 48000, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MA/MA_Ludlow_351848_1944_31680_geo.tif',
-        [-72.5, 42.125, -72.375, 42.25], 31680],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TX/TX_Blanco-1_123777_1930_48000_geo.tif',
+        [-98.125, 30.375, -98.0, 30.5], 48000, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TX/TX_Marquez%20No%204_128391_1925_48000_geo.tif',
-        [-96.375, 31.0, -96.25, 31.125], 48000],
-    [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TX/TX_Roby%202-b_128417_1926_48000_geo.tif',
-        [-100.5, 32.875, -100.375, 33.0], 48000],
-    [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TX/TX_Crowther%20No%203_123898_1925_48000_geo.tif',
-        [-98.5, 28.5, -98.375, 28.625], 48000],
-    [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/ME/ME_Columbia%20Falls_460327_1921_62500_geo.tif',
-        [-67.75, 44.625, -67.625, 44.75], 62500],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TX/TX_Breckenridge%201-a_123808_1924_48000_geo.tif',
+        [-98.625, 32.875, -98.5, 33.0], 48000, '7.5 X 7.5 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CT/CT_Niantic_461318_1938_62500_geo.tif',
-        [-72.25, 41.25, -72.125, 41.375], 62500],
+        [-72.25, 41.25, -72.125, 41.375], 62500, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PR/PR_Barranquitas%20NO_361934_1947_10000_geo.tif',
-        [-66.375, 18.1875, -66.3125, 18.25], 10000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/ME/ME_Columbia%20Falls_460327_1921_62500_geo.tif',
+        [-67.75, 44.625, -67.625, 44.75], 62500, '7.5 X 7.5 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PR/PR_El%20Yunque%20NE_361988_1947_10000_geo.tif',
-        [-65.8125, 18.3125, -65.75, 18.375], 10000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PR/PR_Moca%20NE_362007_1950_10000_geo.tif',
+        [-67.0625, 18.4375, -67.0, 18.5], 10000, '3.75 X 3.75 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PR/PR_Bayaney%20NO_361942_1947_10000_geo.tif',
-        [-66.875, 18.3125, -66.8125, 18.375], 10000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PR/PR_Barceloneta%20NE_361929_1950_10000_geo.tif',
+        [-66.5625, 18.4375, -66.5, 18.5], 10000, '3.75 X 3.75 Minute'],
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PR/PR_Ciales%20SE_361974_1947_10000_geo.tif',
+        [-66.4375, 18.25, -66.375, 18.3125], 10000, '3.75 X 3.75 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TX/TX_Dallas%20(A)_109075_1968_12000_geo.tif',
-        [-96.875, 32.8125, -96.8125, 32.875], 12000],
-    [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/KS/KS_Leonardville_801859_1957_20000_geo.tif',
-        [-97.0, 39.25, -96.75, 39.5], 20000],
+        [-96.875, 32.8125, -96.8125, 32.875], 12000, '3.75 X 3.75 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/KS/KS_White%20City%20South_122725_1927_20000_geo.tif',
-        [-96.75, 38.75, -96.5, 39.0], 20000],
+        [-96.75, 38.75, -96.5, 39.0], 20000, '15 X 15 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/KS/KS_Randolph_801953_1957_20000_geo.tif',
-        [-96.75, 39.25, -96.5, 39.5], 20000],
+        [-96.75, 39.25, -96.5, 39.5], 20000, '15 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/ME/ME_Seven%20Islands_460866_1955_24000_geo.tif',
-        [-69.75, 46.75, -69.5, 47.0], 24000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/KS/KS_Leonardville_801859_1957_20000_geo.tif',
+        [-97.0, 39.25, -96.75, 39.5], 20000, '15 X 15 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/ME/ME_Brooklin_460248_1981_24000_geo.tif',
-        [-68.0, 46.25, -67.75, 46.5], 24000],
+        [-68.0, 46.25, -67.75, 46.5], 24000, '15 X 15 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/PA/PA_Howard_461771_1944_24000_geo.tif',
-        [-77.75, 41.0, -77.5, 41.25], 24000],
+        [-77.75, 41.0, -77.5, 41.25], 24000, '15 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/HI/HI_Island%20of%20Lanai_467936_1923_31680_geo.tif',
-        [-157.08333330000002, 20.7083333, -156.79166669999998, 20.9583333],
-        31680],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/ME/ME_Seven%20Islands_460866_1955_24000_geo.tif',
+        [-69.75, 46.75, -69.5, 47.0], 24000, '15 X 15 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/UT/UT_Wasatch_252663_1922_31680_geo.tif',
-        [-111.5, 39.0, -111.25, 39.25], 31680],
+        [-111.5, 39.0, -111.25, 39.25], 31680, '15 X 15 Minute'],
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MI/MI_Manistique_277856_1931_31680_geo.tif',
+        [-86.25, 45.75, -86.0, 46.0], 31680, '15 X 15 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MN/MN_Juneberry_805494_1930_31680_geo.tif',
-        [-96.5, 48.75, -96.25, 49.0], 31680],
+        [-96.5, 48.75, -96.25, 49.0], 31680, '15 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/ME/ME_Stockholm_807692_1927_48000_geo.tif',
-        [-68.25, 47.0, -68.0, 47.25], 48000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/KY/KY_Higginsport_804206_1928_48000_geo.tif',
+        [-84.0, 38.75, -83.75, 39.0], 48000, '15 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/VT/VT_Guildhall_337799_1931_48000_geo.tif',
-        [-71.75, 44.5, -71.5, 44.75], 48000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AZ/AZ_Aguila%20Mountains_464992_1927_48000_geo.tif',
+        [-113.5, 32.5, -113.25, 32.75], 48000, '15 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/KY/KY_Lockport_804229_1906_48000_geo.tif',
-        [-85.0, 38.25, -84.75, 38.5], 48000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/ME/ME_Phillips_807620_1929_48000_geo.tif',
+        [-70.5, 44.75, -70.25, 45.0], 48000, '15 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TX/TX_Dilley_122265_2002_50000_geo.tif',
-        [-99.25, 28.5, -99.0, 28.75], 50000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Cottonwood%20Spring_296650_2003_50000_geo.tif',
+        [-116.0, 33.5, -115.75, 33.75], 50000, '15 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Alpine%20Butte_465291_1947_50000_geo.tif',
-        [-118.0, 34.5, -117.75, 34.75], 50000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Mt%20Michelson%20D-1_463949_1962_50000_geo.tif',
+        [-144.6, 69.75, -144.0, 70.0], 50000, '15 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Harrison%20Bay%20D-5_463769_1962_50000_geo.tif',
-        [-153.0, 70.75, -152.4, 71.0], 50000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Meade%20River%20D-5_463932_1962_50000_geo.tif',
+        [-159.0, 70.75, -158.4, 71.0], 50000, '15 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MO/MO_Big%20Piney_324720_1954_62500_geo.tif',
-        [-92.25, 37.5, -92.0, 37.75], 62500],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AZ/AZ_Benson_314362_1958_62500_geo.tif',
+        [-110.5, 31.75, -110.25, 32.0], 62500, '15 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/VT/VT_Bennington_337855_1954_62500_geo.tif',
-        [-73.25, 42.75, -73.0, 43.0], 62500],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Deep%20Creek_297302_1902_62500_geo.tif',
+        [-117.25, 34.25, -117.0, 34.5], 62500, '15 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/LA/LA_Farmerville_334528_1952_62500_geo.tif',
-        [-92.5, 32.75, -92.25, 33.0], 62500],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/OR/OR_Reedsport_282831_1956_62500_geo.tif',
+        [-124.25, 43.5, -124.0, 43.75], 62500, '15 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Karluk%20D-5_356495_1951_63360_geo.tif',
-        [-155.66666669999998, 57.75, -155.33333330000002, 58.0], 63360],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Talkeetna%20D-1_359576_1958_63360_geo.tif',
+        [-150.5, 62.75, -150.0, 63.0], 63360, '15 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Bethel%20A-1_354405_1979_63360_geo.tif',
-        [-159.375, 60.0, -159.0, 60.25], 63360],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Port%20Alexander%20A-1_358456_1948_63360_geo.tif',
+        [-134.33333330000002, 56.0, -134.0, 56.25], 63360, '15 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Livengood%20A-2_463911_1952_63360_geo.tif',
-        [-148.0, 65.0, -147.5, 65.25], 63360],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Mount%20Michelson%20B-1_357822_1955_63360_geo.tif',
+        [-144.6, 69.25, -144.0, 69.5], 63360, '15 X 15 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/OK/OK_Norman_802551_1893_96000_geo.tif',
-        [-97.5, 35.0, -97.25, 35.25], 96000],
+        [-97.5, 35.0, -97.25, 35.25], 96000, '15 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MA/MA_Billerica_350850_1987_25000_geo.tif',
-        [-71.5, 42.5, -71.25, 42.625], 25000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/SD/SD_Princes%20Ranch_344584_1980_25000_geo.tif',
+        [-101.0, 44.375, -100.75, 44.5], 25000, '7.5 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MA/MA_Somerset_351310_1985_25000_geo.tif',
-        [-71.25, 41.75, -71.0, 41.875], 25000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MA/MA_Hull_351034_1984_25000_geo.tif',
+        [-71.0, 42.25, -70.75, 42.375], 25000, '7.5 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MA/MA_Barre_350835_1988_25000_geo.tif',
-        [-72.25, 42.375, -72.0, 42.5], 25000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MA/MA_Ashfield_350808_1998_25000_geo.tif',
+        [-73.0, 42.5, -72.75, 42.625], 25000, '7.5 X 15 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MA/MA_Warwick_352419_1932_48000_geo.tif',
-        [-72.5, 42.625, -72.25, 42.75], 48000],
+        [-72.5, 42.625, -72.25, 42.75], 48000, '7.5 X 15 Minute'],
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MA/MA_Lowell_352418_1931_48000_geo.tif',
+        [-71.5, 42.625, -71.25, 42.75], 48000, '7.5 X 15 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/NY/NY_Starrucca_144032_1924_48000_geo.tif',
-        [-75.5, 41.875, -75.25, 42.0], 48000],
+        [-75.5, 41.875, -75.25, 42.0], 48000, '7.5 X 15 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MA/MA_Winchendon_352420_1932_48000_geo.tif',
-        [-72.25, 42.625, -72.0, 42.75], 48000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/ID/ID_Riggins_239349_1938_96000_geo.tif',
+        [-116.5, 45.0, -116.0, 45.5], 96000, '30 X 30 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Elizabeth%20Lake_299035_1915_96000_geo.tif',
-        [-118.5, 34.5, -118.0, 35.0], 96000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Burney_299034_1935_96000_geo.tif',
+        [-122.0, 40.5, -121.5, 41.0], 96000, '30 X 30 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Big%20Bar_299032_1909_96000_geo.tif',
-        [-123.5, 40.5, -123.0, 41.0], 96000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/NM/NM_Sulphur%20Spring_189428_1927_96000_geo.tif',
+        [-108.75, 36.25, -108.25, 36.75], 96000, '30 X 30 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/NM/NM_Tularosa_189434_1911_96000_geo.tif',
-        [-106.5, 33.0, -106.0, 33.5], 96000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TN/TN_Lebanon_149953_1942_100000_geo.tif',
+        [-86.75, 35.75, -86.25, 36.25], 100000, '30 X 30 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TN/TN_Statesville_155953_1942_100000_geo.tif',
-        [-86.25, 35.75, -85.75, 36.25], 100000],
-    [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TN/TN_Cookeville_149603_1944_100000_geo.tif',
-        [-85.75, 35.75, -85.25, 36.25], 100000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/NC/NC_Charlotte_473601_1942_100000_geo.tif',
+        [-81.0, 35.0, -80.5, 35.5], 100000, '30 X 30 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TN/TN_Mc%20Minnville_150199_1943_100000_geo.tif',
-        [-86.25, 35.25, -85.75, 35.75], 100000],
+        [-86.25, 35.25, -85.75, 35.75], 100000, '30 X 30 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MT/MT_Heart%20Butte_268564_1918_125000_geo.tif',
-        [-113.0, 48.0, -112.5, 48.5], 125000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Yosemite_299700_1909_125000_geo.tif',
+        [-120.0, 37.5, -119.5, 38.0], 125000, '30 X 30 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/GA/GA_Atlanta_467587_1890_125000_geo.tif',
-        [-84.5, 33.5, -84.0, 34.0], 125000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/SD/SD_Deadwood_344760_1894_125000_geo.tif',
+        [-104.0, 44.0, -103.5, 44.5], 125000, '30 X 30 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CO/CO_Pagosa%20Springs_467127_1927_125000_geo.tif',
-        [-107.5, 37.0, -107.0, 37.5], 125000],
-    [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/WA/WA_Mt%20Baker_242611_1909_192000_geo.tif',
-        [-122.0, 48.5, -121.5, 49.0], 192000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TX/TX_Hayrick_128667_1894_125000_geo.tif',
+        [-100.5, 31.5, -100.0, 32.0], 125000, '30 X 30 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Big%20Bar_299708_1911_192000_geo.tif',
-        [-123.5, 40.5, -123.0, 41.0], 192000],
+        [-123.5, 40.5, -123.0, 41.0], 192000, '30 X 30 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Big%20Bar%20and%20Vicinity_465343_1915_250000_geo.tif',
-        [-123.75, 40.5, -123.0, 41.0], 250000],
-    [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Big%20Bar%20and%20Vicinity_299743_1915_250000_geo.tif',
-        [-123.75, 40.5, -123.0, 41.0], 250000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/WA/WA_Mt%20Baker_242611_1909_192000_geo.tif',
+        [-122.0, 48.5, -121.5, 49.0], 192000, '30 X 30 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Big%20Bar%20and%20Vicinity_465341_1915_250000_geo.tif',
-        [-123.75, 40.5, -123.0, 41.0], 250000],
+        [-123.75, 40.5, -123.0, 41.0], 250000, '30 X 30 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TX/TX_Encino_117702_1992_100000_geo.tif',
-        [-99.0, 26.5, -98.0, 27.0], 100000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Big%20Bar%20and%20Vicinity_299743_1915_250000_geo.tif',
+        [-123.75, 40.5, -123.0, 41.0], 250000, '30 X 30 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/NC/NC_Henderson_162162_1991_100000_geo.tif',
-        [-79.0, 36.0, -78.0, 36.5], 100000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/WA/WA_Mt%20Baker%20Dist_242737_1915_250000_geo.tif',
+        [-122.0, 48.5, -121.5, 49.0], 250000, '30 X 30 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TX/TX_Zapata_123672_1985_100000_geo.tif',
-        [-100.0, 26.5, -99.0, 27.0], 100000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/NV/NV_Pahute%20Mesa_321545_1979_100000_geo.tif',
+        [-117.0, 37.0, -116.0, 37.5], 100000, '30 X 60 Minute'],
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/SD/SD_Timber%20Lake_344719_1986_100000_geo.tif',
+        [-102.0, 45.0, -101.0, 45.5], 100000, '30 X 60 Minute'],
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/IL/IL_Chicago_310155_1980_100000_geo.tif',
+        [-88.0, 41.5, -87.0, 42.0], 100000, '30 X 60 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TX/TX_Cotulla_123888_1929_125000_geo.tif',
-        [-100.0, 28.0, -99.0, 28.5], 125000],
+        [-100.0, 28.0, -99.0, 28.5], 125000, '30 X 60 Minute'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Santa%20Ana_302139_1960_250000_geo.tif',
-        [-118.0, 33.0, -116.0, 34.0], 250000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AL/AL_Phenix%20City_305931_1958_250000_geo.tif',
+        [-86.0, 32.0, -84.0, 33.0], 250000, '1 X 2 Degree'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_San%20Luis%20Obispo_302131_1958_250000_geo.tif',
-        [-122.0, 35.0, -120.0, 36.0], 250000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TX/TX_Wichita%20Falls_117118_1954_250000_geo.tif',
+        [-100.0, 33.0, -98.0, 34.0], 250000, '1 X 2 Degree'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/TX/TX_Beaumont_707218_1984_250000_geo.tif',
-        [-96.0, 30.0, -94.0, 31.0], 250000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/OR/OR_Roseburg_283349_1958_250000_geo.tif',
+        [-124.0, 43.0, -122.0, 44.0], 250000, '1 X 2 Degree'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Talkeetna_464161_1965_250000_geo.tif',
-        [-153.0, 62.0, -150.0, 63.0], 250000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Demarcation%20Point_463682_1964_250000_geo.tif',
+        [-144.0, 69.0, -141.0, 70.0], 250000, '1 X 3 Degree'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Mt%20Saint%20Elias_361195_1959_250000_geo.tif',
-        [-141.0, 60.0, -138.0, 61.0], 250000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Chandler%20Lake_360740_1956_250000_geo.tif',
+        [-153.0, 68.0, -150.0, 69.0], 250000, '1 X 3 Degree'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Beechey%20Point_360621_1960_250000_geo.tif',
-        [-150.0, 70.0, -147.0, 71.0], 250000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Seward_361838_1953_250000_geo.tif',
+        [-150.0, 60.0, -147.0, 61.0], 250000, '1 X 3 Degree'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Searles%20Lake_299884_1915_250000_geo.tif',
-        [-118.0, 35.0, -117.0, 36.0], 250000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/NV/NV_Saint%20Thomas_321775_1886_250000_geo.tif',
+        [-115.0, 36.0, -114.0, 37.0], 250000, '1 X 1 Degree'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AZ/AZ_Kaibab_315511_1886_250000_geo.tif',
-        [-113.0, 36.0, -112.0, 37.0], 250000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/NV/NV_Roberts%20Mountains_321771_1929_250000_geo.tif',
+        [-117.0, 39.0, -116.0, 40.0], 250000, '1 X 1 Degree'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/MT/MT_Three%20Forks_268807_1894_250000_geo.tif',
-        [-112.0, 45.0, -111.0, 46.0], 250000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AZ/AZ_Fort%20Defiance_315488_1886_250000_geo.tif',
+        [-110.0, 35.0, -109.0, 36.0], 250000, '1 X 1 Degree'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Teller_361556_1951_250000_geo.tif',
-        [-169.0, 65.0, -165.0, 66.0], 250000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Wainwright_361660_1955_250000_geo.tif',
+        [-163.0, 70.0, -159.0, 71.0], 250000, '1 X 4 Degree'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Teller_361550_1950_250000_geo.tif',
-        [-169.0, 65.0, -165.0, 66.0], 250000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Teller_361551_1950_250000_geo.tif',
+        [-169.0, 65.0, -165.0, 66.0], 250000, '1 X 4 Degree'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Wainwright_361658_1955_250000_geo.tif',
-        [-163.0, 70.0, -159.0, 71.0], 250000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Teller_361554_1950_250000_geo.tif',
+        [-169.0, 65.0, -165.0, 66.0], 250000, '1 X 4 Degree'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/OR/OR_Coos%20Bay_283315_1962_250000_geo.tif',
-        [-125.0, 42.0, -124.0, 44.0], 250000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/VA/VA_Eastville_189247_1966_250000_geo.tif',
+        [-76.0, 36.0, -75.0, 38.0], 250000, '2 X 1 Degree'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Santa%20Maria_302151_1962_250000_geo.tif',
-        [-121.0, 33.0, -120.0, 35.0], 250000],
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/WA/WA_Copalis%20Beach_240663_1957_250000_geo.tif',
+        [-125.0, 46.0, -124.0, 48.0], 250000, '2 X 1 Degree'],
     [
-        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Eureka_299766_1949_250000_geo.tif',
-        [-125.0, 40.0, -124.0, 42.0], 250000]]
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Eureka_465608_1949_250000_geo.tif',
+        [-125.0, 40.0, -124.0, 42.0], 250000, '2 X 1 Degree']]
 # yapf: enable
 #
 
 
-@pytest.mark.parametrize("url,map_bounds,scale", AUTOMATED_TEST_CASES)
-def test_extent(url, map_bounds, scale):
+@pytest.mark.parametrize("url,map_bounds,scale,grid_size", AUTOMATED_TEST_CASES)
+def test_extent(url, map_bounds, scale, grid_size):
     with rasterio.open(url) as r:
         # Convert image bounds to wgs84
         image_wgs_bounds = transform_bounds(

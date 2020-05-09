@@ -1,3 +1,4 @@
+data/
 *.tif
 *.json
 *.json.gz

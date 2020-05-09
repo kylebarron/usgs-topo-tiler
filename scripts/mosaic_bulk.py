@@ -78,33 +78,35 @@ def main(
         meta_path, s3_list_path, min_scale, max_scale, min_year, max_year,
         woodland_tint, allow_orthophoto, bbox):
     df = pd.read_csv(path, low_memory=False)
+    # Rename column names to lower case and snake case
+    df = df.rename(columns=lambda col: col.lower().replace(' ', '_'))
 
     # Keep only historical maps
     # Newer maps are only in GeoPDF, and not in GeoTIFF, let alone COG
-    df = df[df['Series'] == 'HTMC']
+    df = df[df['series'] == 'HTMC']
 
     # Create year column as Imprint Year if it exists, otherwise Date On Map
-    df['year'] = df['Imprint Year'].fillna(df['Date On Map'])
+    df['year'] = df['imprint_year'].fillna(df['date_on_map'])
 
     # Apply filters
     if min_scale:
-        df = df[df['Scale'] >= min_scale]
+        df = df[df['scale'] >= min_scale]
     if max_scale:
-        df = df[df['Scale'] <= max_scale]
+        df = df[df['scale'] <= max_scale]
     if min_year:
-        df = df[df['Year'] >= min_year]
+        df = df[df['year'] >= min_year]
     if max_year:
-        df = df[df['Year'] <= max_year]
+        df = df[df['year'] <= max_year]
     if woodland_tint is not None:
         if woodland_tint:
-            df = df[df['Woodland Tint'] == 'Y']
+            df = df[df['woodland_tint'] == 'Y']
         else:
-            df = df[df['Woodland Tint'] == 'N']
+            df = df[df['woodland_tint'] == 'N']
     if not allow_orthophoto:
-        df = df[df['Orthophoto'].isna()]
+        df = df[df['orthophoto'].isna()]
 
     # Create s3 GeoTIFF paths from metadata
-    df['s3_tif'] = construct_s3_tif_url(df['Download Product S3'])
+    df['s3_tif'] = construct_s3_tif_url(df['download_product_s3'])
 
     if s3_list_path:
         # Load list of GeoTIFF files
@@ -148,10 +150,10 @@ def load_s3_list(s3_list_path):
 
 def construct_geometry(row):
     return box(
-        row['W Long'],
-        row['S Lat'],
-        row['E Long'],
-        row['N Lat'],
+        row['w_long'],
+        row['s_lat'],
+        row['e_long'],
+        row['n_lat'],
     )
 
 

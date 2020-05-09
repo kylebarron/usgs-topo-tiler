@@ -8,11 +8,10 @@ from shapely.geometry import box
 path = '../data/topomaps_all/topomaps_all.csv'
 s3_list_path = '../data/geotiff_files.txt'
 
-
-
 # TODO: Add filters for topographic, woodland tint. Some maps made at the same time with neighboring ids are quite different, e.g.
 # CA_Acton_302201_1959_24000_geo.tif
 # CA_Acton_302202_1959_24000_geo.tif
+
 
 # TODO: option for high scale, medium scale, low scale
 # High scale: 24k, Medium scale: 63k, low scale: 250k
@@ -32,7 +31,8 @@ def main(meta_path, s3_list_path):
     # Create s3 GeoTIFF paths from metadata
     gdf['s3_tif'] = construct_s3_tif_url(gdf['Download Product S3'])
 
-    filter_cog_exists
+    # Keep only files that exist as GeoTIFF
+    gdf = filter_cog_exists(gdf, s3_files_df)
 
     # Filter (sort) by desired scale
     # What to do when assets don't exist for a given scale?
@@ -42,6 +42,7 @@ def main(meta_path, s3_list_path):
 
     # Separate mosaics for continental U.S. and Alaska? Might have different
     # zoom ranges?
+
 
 def load_s3_list(s3_list_path):
     """Filter df using list of COG files
@@ -58,7 +59,6 @@ def load_s3_list(s3_list_path):
     return s3_files_df
 
 
-
 def construct_geometry(row):
     return box(
         row['W Long'],
@@ -66,7 +66,6 @@ def construct_geometry(row):
         row['E Long'],
         row['N Lat'],
     )
-
 
 
 def construct_s3_tif_url(series: pd.Series) -> pd.Series:
@@ -95,4 +94,12 @@ def construct_s3_tif_url(series: pd.Series) -> pd.Series:
     paths += parts.apply(lambda x: x[9].replace('.pdf', '.tif'))
 
     return paths
+
+
+def filter_cog_exists(gdf, s3_files_df):
+    """Filter rows to include only GeoTIFF files that exist on S3
+    """
+    return gdf.merge(
+        s3_files_df, how='inner', left_on='s3_tif', right_on='path')
+
 

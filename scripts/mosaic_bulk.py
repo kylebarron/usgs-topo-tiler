@@ -1,10 +1,12 @@
+import json
 from urllib.parse import unquote
 
 import click
 import geopandas as gpd
 import pandas as pd
+from cogeo_mosaic.mosaic import MosaicJSON
 from rio_tiler.mercator import zoom_for_pixelsize
-from shapely.geometry import box
+from shapely.geometry import box, asShape
 
 path = '../data/topomaps_all/topomaps_all.csv'
 s3_list_path = '../data/geotiff_files.txt'
@@ -124,6 +126,23 @@ def main(
         bbox = box(*map(float, bbox.split(',')))
         gdf = gdf[gdf.geometry.intersects(bbox)]
 
+    low_scale = gdf[gdf['scale'] >= 250000]
+    features = low_scale.__geo_interface__['features']
+    maxzoom = low_scale.apply(
+        lambda row: get_maxzoom(row['scale'], row['scanner_resolution']),
+        axis=1)
+    maxzoom = round(maxzoom.mean())
+    minzoom = maxzoom - 5
+
+    mosaic = MosaicJSON.from_features(
+        features,
+        minzoom=minzoom,
+        maxzoom=maxzoom,
+        # asset_filter=asset_filter,
+        accessor=path_accessor)
+
+    print(json.dumps(mosaic.dict(), separators=(',', ':')))
+
     # Filter (sort) by desired scale
     # What to do when assets don't exist for a given scale?
     # Maybe decide on bins for high/medium/low scale and then plot footprints?
@@ -132,6 +151,14 @@ def main(
 
     # Separate mosaics for continental U.S. and Alaska? Might have different
     # zoom ranges?
+
+
+def path_accessor(feature):
+    key = feature['properties']['s3_tif']
+    url = f's3://prd-tnm/{key}'
+    map_bounds = asShape(feature['geometry']).bounds
+    data = {'url': url, 'map_bounds': map_bounds}
+    return json.dumps(data, separators=(',', ':'))
 
 
 def load_s3_list(s3_list_path):

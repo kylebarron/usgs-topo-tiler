@@ -95,7 +95,7 @@ def get_offsets(bounds: List[float], meta: Dict) -> List[float]:
         return _get_offset_63360(bounds)
 
     if scale == 250000:
-        return _get_offset_250000(meta)
+        return _get_offset_250000(bounds, meta)
 
 
 def _get_offset_63360(bounds: List[float]) -> List[float]:
@@ -120,8 +120,17 @@ def _get_offset_63360(bounds: List[float]) -> List[float]:
     return [.2, .25]
 
 
-def _get_offset_250000(meta: Dict) -> List[float]:
-    offset_x, offset_y = .25, .5
+def _get_offset_250000(bounds: List[float], meta: Dict) -> List[float]:
+    offset_x, offset_y = .5, .5
+    minx, miny, maxx, maxy = bounds
+
+    # Alaska
+    if miny > 49:
+        if maxy < 59.5:
+            offset_x, offset_y = .5, .25
+        else:
+            offset_x, offset_y = 1, 1
+
 
     map_name = meta['map_name']
     state = meta['state']

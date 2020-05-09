@@ -245,9 +245,9 @@ AUTOMATED_TEST_CASES = [
     # [
     #     'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Demarcation%20Point_463682_1964_250000_geo.tif',
     #     [-144.0, 69.0, -141.0, 70.0], 250000, '1 X 3 Degree'],
-    # [
-    #     'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Chandler%20Lake_360740_1956_250000_geo.tif',
-    #     [-153.0, 68.0, -150.0, 69.0], 250000, '1 X 3 Degree'],
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Chandler%20Lake_360740_1956_250000_geo.tif',
+        [-153.0, 68.0, -150.0, 69.0], 250000, '1 X 3 Degree'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Seward_361838_1953_250000_geo.tif',
         [-150.0, 60.0, -147.0, 61.0], 250000, '1 X 3 Degree'],
@@ -257,6 +257,7 @@ AUTOMATED_TEST_CASES = [
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/NV/NV_Roberts%20Mountains_321771_1929_250000_geo.tif',
         [-117.0, 39.0, -116.0, 40.0], 250000, '1 X 1 Degree'],
+    # HTTP 404
     # [
     #     'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AZ/AZ_Fort%20Defiance_315488_1886_250000_geo.tif',
     #     [-110.0, 35.0, -109.0, 36.0], 250000, '1 X 1 Degree'],

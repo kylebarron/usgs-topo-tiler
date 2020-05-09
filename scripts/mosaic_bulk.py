@@ -3,6 +3,7 @@ from urllib.parse import unquote
 import click
 import geopandas as gpd
 import pandas as pd
+from rio_tiler.mercator import zoom_for_pixelsize
 from shapely.geometry import box
 
 path = '../data/topomaps_all/topomaps_all.csv'
@@ -77,7 +78,7 @@ s3_list_path = '../data/geotiff_files.txt'
 def main(
         meta_path, s3_list_path, min_scale, max_scale, min_year, max_year,
         woodland_tint, allow_orthophoto, bbox):
-    df = pd.read_csv(path, low_memory=False)
+    df = pd.read_csv(meta_path, low_memory=False)
     # Rename column names to lower case and snake case
     df = df.rename(columns=lambda col: col.lower().replace(' ', '_'))
 
@@ -191,5 +192,14 @@ def filter_cog_exists(df, s3_files_df):
     return df.merge(
         s3_files_df, how='inner', left_on='s3_tif', right_on='path').drop(
             'path', axis=1)
+
+
+def get_maxzoom(scale, dpi, tilesize=512):
+    """Get maxzoom for map from scale and dpi
+
+    Ref: https://gis.stackexchange.com/a/85322
+    """
+    m_per_pixel = 0.0254 / dpi * scale
+    return zoom_for_pixelsize(m_per_pixel, tilesize=tilesize)
 
 

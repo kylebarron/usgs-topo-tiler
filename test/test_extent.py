@@ -151,12 +151,12 @@ AUTOMATED_TEST_CASES = [
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Talkeetna%20D-1_359576_1958_63360_geo.tif',
         [-150.5, 62.75, -150.0, 63.0], 63360, '15 X 15 Minute'],
-    # [
-    #     'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Port%20Alexander%20A-1_358456_1948_63360_geo.tif',
-    #     [-134.33333330000002, 56.0, -134.0, 56.25], 63360, '15 X 15 Minute'],
-    # [
-    #     'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Mount%20Michelson%20B-1_357822_1955_63360_geo.tif',
-    #     [-144.6, 69.25, -144.0, 69.5], 63360, '15 X 15 Minute'],
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Port%20Alexander%20A-1_358456_1948_63360_geo.tif',
+        [-134.33333330000002, 56.0, -134.0, 56.25], 63360, '15 X 15 Minute'],
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Mount%20Michelson%20B-1_357822_1955_63360_geo.tif',
+        [-144.6, 69.25, -144.0, 69.5], 63360, '15 X 15 Minute'],
     [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/OK/OK_Norman_802551_1893_96000_geo.tif',
         [-97.5, 35.0, -97.25, 35.25], 96000, '15 X 15 Minute'],
@@ -279,10 +279,29 @@ AUTOMATED_TEST_CASES = [
         'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/CA/CA_Eureka_465608_1949_250000_geo.tif',
         [-125.0, 40.0, -124.0, 42.0], 250000, '2 X 1 Degree']]
 # yapf: enable
-#
+
+CUSTOM_TEST_CASES = [
+    # Scale == 63360
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AZ/AZ_Wagoner_464904_1948_63360_geo.tif',
+        [-112.75, 34, -112.5, 34.25], 63360, ''],
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Sitka%20D-5_359166_1948_63360_geo.tif',
+        [-135.66666669999998, 57.75, -135.33333330000002, 58], 63360, ''],
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Tyonek%20A-1_359987_1951_63360_geo.tif',
+        [-150.375, 61, -150, 61.25], 63360, ''],
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Medfra%20A-4_357441_1959_63360_geo.tif',
+        [-155, 63, -154.5, 63.25], 63360, ''],
+    [
+        'https://prd-tnm.s3.amazonaws.com/StagedProducts/Maps/HistoricalTopo/GeoTIFF/AK/AK_Lookout%20Ridge%20B-1_357171_1985_63360_geo.tif',
+        [-156.6, 69.25, -156, 69.5], 63360, '']]
 
 
-@pytest.mark.parametrize("url,map_bounds,scale,grid_size", AUTOMATED_TEST_CASES)
+@pytest.mark.parametrize(
+    "url,map_bounds,scale,grid_size",
+    [*AUTOMATED_TEST_CASES, *CUSTOM_TEST_CASES])
 def test_extent(url, map_bounds, scale, grid_size):
     with rasterio.open(url) as r:
         # Convert image bounds to wgs84

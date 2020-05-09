@@ -76,4 +76,21 @@ def get_offsets(bounds, scale):
 
 def _get_offset_63360(bounds):
     """Custom cases for scale==63360"""
-    pass
+    maxy = bounds[3]
+
+    # Lower 48
+    if maxy <= 49:
+        return [.25, .25]
+
+    # Sections of Alaska
+    if maxy <= 59:
+        return [1 / 3, .25]
+
+    if maxy <= 62:
+        return [.375, .25]
+
+    if maxy <= 68:
+        return [.5, .25]
+
+    # Each map has a width of .6
+    return [.2, .25]

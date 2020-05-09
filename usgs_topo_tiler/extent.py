@@ -25,8 +25,7 @@ SCALE_DEGREE_OFFSET_XW = {
     96000: .25,
     100000: .5,
     125000: .5,
-    192000: .5,
-    250000: .5}
+    192000: .5}
 
 
 def parse_url(url: str) -> int:
@@ -47,9 +46,9 @@ def parse_url(url: str) -> int:
 
     match = re.search(regex, fname)
 
-    map_name = match.group('map_name')
+    map_name = match.group('map_name').lower().replace(' ', '')
     map_id = int(match.group('map_id'))
-    state = match.group('state')
+    state = match.group('state').lower()
     year = int(match.group('year'))
     scale = int(match.group('scale'))
     return {
@@ -81,11 +80,11 @@ def get_extent(bounds: List[float], url: str) -> List[float]:
         - url: url to COG on S3
     """
     meta = parse_url(url)
-    offset_x, offset_y = get_offsets(bounds, meta, url)
+    offset_x, offset_y = get_offsets(bounds, meta)
     return _get_extent(bounds, offset_x, offset_y)
 
 
-def get_offsets(bounds: List[float], meta: Dict, url: str) -> List[float]:
+def get_offsets(bounds: List[float], meta: Dict) -> List[float]:
     scale = meta['scale']
     easy_offset = SCALE_DEGREE_OFFSET_XW.get(scale)
     if easy_offset:
@@ -94,6 +93,9 @@ def get_offsets(bounds: List[float], meta: Dict, url: str) -> List[float]:
     # Custom cases
     if scale == 63360:
         return _get_offset_63360(bounds)
+
+    if scale == 250000:
+        return _get_offset_250000(meta)
 
 
 def _get_offset_63360(bounds: List[float]) -> List[float]:
@@ -116,3 +118,26 @@ def _get_offset_63360(bounds: List[float]) -> List[float]:
 
     # Each map has a width of .6
     return [.2, .25]
+
+
+def _get_offset_250000(meta: Dict) -> List[float]:
+    offset_x, offset_y = .25, .5
+
+    map_name = meta['map_name']
+    state = meta['state']
+    if state == 'ca' and map_name == 'santacruz':
+        offset_x = .2
+    elif state == 'wa' and map_name == 'vancouver':
+        # west long is -124.0833
+        offset_x = .1
+    elif state == 'or' and map_name == 'salem':
+        # west long is -124.1833
+        offset_x = .18
+    elif state == 'sc' and map_name == 'georgetown':
+        # east long is -77.8833333
+        offset_x = .12
+    elif state == 'ri' and map_name == 'providence':
+        # east long is -69.8833333
+        offset_x = .12
+
+    return [offset_x, offset_y]

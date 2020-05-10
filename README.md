@@ -1,16 +1,20 @@
 # usgs-topo-tiler
 
-Library to read Web Mercator map tiles from USGS Historical Topographic Maps,
-and utilities to create a [MosaicJSON][mosaicjson] collection from these maps.
+Python package to read Web Mercator map tiles from USGS Historical Topographic
+Maps, and utilities to create a [MosaicJSON][mosaicjson] collection from these
+maps.
 
 [mosaicjson]: https://github.com/developmentseed/mosaicjson-spec/
 
 ## Overview
 
 I stumbled upon a hidden gem: the entire USGS historical topographic map
-archive, consisting of 183112 digitized maps from 1884 to 2006, is stored in
-Cloud-Optimized GeoTIFF (COG) format on AWS S3. Incredulously, this fact is
-currently unpublicized.
+archive, consisting of 183,112 digitized maps created between 1884 and 2006, is
+stored in Cloud-Optimized GeoTIFF (COG) format on AWS S3.
+
+The fact that maps are accessible publicly and stored in COG format means that
+you can easily and cheaply set up a serverless function on AWS Lambda to serve
+map tiles on the fly.
 
 The [COG format][cogeo] is a backwards-compatible, cloud-native storage format
 for raster files that allow selected portions of the file to be read over the
@@ -76,6 +80,8 @@ GeoTIFF on S3.
 For this demo, I'll make a mercator tile from an 1897 topographic map of
 Yosemite Valley.
 
+**Read a tile from a file over the internet**
+
 ```py
 from usgs_topo_tiler import tile
 
@@ -90,7 +96,10 @@ print(mask.shape)
 # (512, 512)
 ```
 
-Create image from tile
+**Create image from tile**
+
+Note that if you're using `rio-tiler` v1, you should replace `render` with
+`array_to_image`.
 
 ```py
 from rio_tiler.utils import render
@@ -98,28 +107,82 @@ from rio_tiler.utils import render
 buffer = render(tile, mask, img_format='png')
 ```
 
-Write image to file
+**Write image to file**
 
 ```py
 with open('yose_1897.png', 'wb') as f:
     f.write(buffer)
 ```
 
-You now have a 512x512 png image aligned with the Web Mercator grid.
+You now have a 512x512 png image aligned with the Web Mercator grid, and because
+the source is a _Cloud-optimized_ GeoTIFF, the image was made with a minimal
+number of requests to the source, and without reading the entire GeoTIF.
 
 ![Yosemite, 1897 Web Mercator tile](assets/yose_1897.png)
 
 ## Create a MosaicJSON
 
-### Download list of COG files:
+The process described above is for create _one_ tile. But often we want to join
+many mercator tiles to make a seamless web map. This is where
+[MosaicJSON][mosaicjson] comes in. It describes how to join sources and where to
+place them.
+
+This section outlines how to create a MosaicJSON from USGS historical topo
+assets. This MosaicJSON can then be used with `usgs-topo-mosaic` to serve a web
+map of tiles with AWS Lambda.
+
+### Install
+
+When you install `usgs-topo-tiler`, it doesn't include dependencies necessary
+for the CLI commands so as to keep the deployment size small when used with
+[`usgs-topo-mosaic`][usgs-topo-mosaic].
+
+To install the additional CLI dependencies, run:
 
 ```bash
-python scripts/list_s3.py \
+pip install 'usgs-topo-tiler[cli]'
+```
+
+### Download bulk metadata
+
+First you need to download metadata including at least the geospatial bounds of
+each map, and the URL of each map. It's possible to use the [National Map
+API][nationalmap_api] to retrieve such metadata, however I prefer to download a
+CSV of bulk metadata from S3. This file includes metadata on every image in
+their collection.
+
+[nationalmap_api]: https://viewer.nationalmap.gov/tnmaccess/api/index
+
+```bash
+mkdir -p data
+wget https://prd-tnm.s3-us-west-2.amazonaws.com/StagedProducts/Maps/Metadata/topomaps_all.zip -P data/
+unzip topomaps_all.zip
+```
+
+`data/topomaps_all.csv` is the extracted bulk metadata file. `data/readme.txt`
+has helpful information about what fields are in the bulk metadata file.
+
+### Download list of COG files:
+
+Occasionally there are some files listed in the metadata that don't exist as
+GeoTIFF. I download a list of the `.tif` files on S3 so that I can
+cross-reference against the metadata and ensure that only files that exist are
+included in the MosaicJSON.
+
+This step is optional, but recommended.
+
+```bash
+mkdir -p data/
+usgs-topo-tiler list-s3 \
     --bucket 'prd-tnm' \
     --prefix 'StagedProducts/Maps/HistoricalTopo/GeoTIFF/' \
     --ext '.tif' \
     > data/geotiff_files.txt
 
 > wc -l data/geotiff_files.txt
-  183112 data/geotiff_files.txt
+    183112 data/geotiff_files.txt
+```
+
+_183112_ COG files!
+
 ```

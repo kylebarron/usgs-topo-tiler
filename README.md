@@ -198,9 +198,76 @@ kepler mid_scale_footprints.geojsonl
 This illustrates the core problem of these historical maps when making a
 MosaicJSON. Some areas have been mapped more than others, and some have never
 been mapped at this scale range. If you were to create a MosaicJSON from these
-parameters, you'd get empty images when requesting data over northern Montana.
+parameters, you'd get empty images when requesting data over Northern Montana
+and Western Texas.
 
 ![](assets/mid_scale_footprints.png)
+
+#### Generate MosaicJSON
+
+Once you know the desired parameters of your query, remove the `--filter-only`
+flag to generate the MosaicJSON. For example:
+
+```bash
+usgs-topo-tiler mosaic-bulk \
+    --meta-path data/topomaps_all.csv \
+    --s3-list-path data/geotiff_files.txt \
+    --min-scale 63360 \
+    --max-scale 249000 \
+    > mid_scale_mosaic.json
+```
+
+`mid_scale_mosaic.json` is now a MosaicJSON file that can be used with
+`usgs-topo-mosaic` to render a web map. Note, however that this uses a custom
+asset string format, as described in [Removing Map
+Collars](#removing-map-collars), and won't necessarily work with all other
+MosaicJSON tools.
+
+#### Examples
+
+**Low zoom, newest available**
+
+```bash
+usgs-topo-tiler mosaic-bulk \
+    --meta-path data/topomaps_all.csv \
+    --s3-list-path data/geotiff_files.txt \
+    --min-scale 250000 \
+    > mosaic_low.json
+```
+
+**Medium zoom, newest available, filling in with lower-resolution maps where necessary**
+
+```bash
+usgs-topo-tiler mosaic-bulk \
+    --meta-path data/topomaps_all.csv \
+    --s3-list-path data/geotiff_files.txt \
+    --min-scale 63360 \
+    > mosaic_medium.json
+```
+
+**Medium zoom, oldest available, filling in with lower-resolution maps where necessary**
+
+```bash
+usgs-topo-tiler mosaic-bulk \
+    --meta-path data/topomaps_all.csv \
+    --s3-list-path data/geotiff_files.txt \
+    --min-scale 63360 \
+    --sort-preference oldest \
+    > mosaic_medium_oldest.json
+```
+
+**High zoom, newest available, continental U.S. only**
+
+```bash
+usgs-topo-tiler mosaic-bulk \
+    --meta-path data/topomaps_all.csv \
+    --s3-list-path data/geotiff_files.txt \
+    --min-scale 24000 \
+    --max-scale 63359 \
+    `# Lower 48 states only` \
+    --bounds '-161.96,12.85,-55.01,50.53' \
+    > mosaic_high.json
+```
 
 #### API
 

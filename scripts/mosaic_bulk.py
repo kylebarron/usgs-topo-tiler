@@ -106,10 +106,17 @@ from shapely.geometry import asShape, box
     type=int,
     default=None,
     help='Year used for comparisons when preference is closest-to-year.')
+@click.option(
+    '--filter-only',
+    is_flag=True,
+    help=
+    'Output filtered GeoJSON features, without creating the MosaicJSON. Useful for inspecting the footprints ',
+    default=False,
+    show_default=True)
 def main(
         meta_path, s3_list_path, min_scale, max_scale, min_year, max_year,
         woodland_tint, allow_orthophoto, bounds, minzoom, maxzoom, quadkey_zoom,
-        sort_preference, closest_to_year):
+        sort_preference, closest_to_year, filter_only):
     if (sort_preference == 'closest-to-year') and (not closest_to_year):
         msg = 'closest-to-year parameter required when sort-preference is closest-to-year'
         raise ValueError(msg)
@@ -184,6 +191,12 @@ def main(
         sort_ascending = [True, True]
         cols.remove('year')
         cols.append('reference_year')
+
+    if filter_only:
+        for row in gdf[cols].iterfeatures():
+            print(json.dumps(row, separators=(',', ':')))
+
+        return
 
     # Convert to features
     features = gdf[cols].__geo_interface__['features']

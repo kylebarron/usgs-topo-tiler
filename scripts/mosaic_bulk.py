@@ -76,9 +76,29 @@ from shapely.geometry import asShape, box
     default=None,
     show_default=True,
     help='Bounding box for mosaic. Must be of format "minx,miny,maxx,maxy"')
+@click.option(
+    '-z',
+    '--minzoom',
+    type=int,
+    default=None,
+    show_default=True,
+    help='Force mosaic minzoom')
+@click.option(
+    '-Z',
+    '--maxzoom',
+    type=int,
+    default=None,
+    show_default=True,
+    help='Force mosaic maxzoom')
+@click.option(
+    '--quadkey-zoom',
+    type=int,
+    default=None,
+    show_default=True,
+    help='Force mosaic quadkey zoom')
 def main(
         meta_path, s3_list_path, min_scale, max_scale, min_year, max_year,
-        woodland_tint, allow_orthophoto, bbox):
+        woodland_tint, allow_orthophoto, bbox, minzoom, maxzoom, quadkey_zoom):
     df = pd.read_csv(meta_path, low_memory=False)
     # Rename column names to lower case and snake case
     df = df.rename(columns=lambda col: col.lower().replace(' ', '_'))
@@ -125,11 +145,13 @@ def main(
         bbox = box(*map(float, bbox.split(',')))
         gdf = gdf[gdf.geometry.intersects(bbox)]
 
-    maxzoom = gdf.apply(
-        lambda row: get_maxzoom(row['scale'], row['scanner_resolution']),
-        axis=1)
-    maxzoom = round(maxzoom.mean())
-    minzoom = maxzoom - 5
+    if not maxzoom:
+        maxzoom = gdf.apply(
+            lambda row: get_maxzoom(row['scale'], row['scanner_resolution']),
+            axis=1)
+        maxzoom = round(maxzoom.median())
+    if not minzoom:
+        minzoom = maxzoom - 5
 
     # Convert to features
     cols = ['scale', 'year', 's3_tif', 'geometry', 'cell_id']
@@ -139,6 +161,7 @@ def main(
         features,
         minzoom=minzoom,
         maxzoom=maxzoom,
+        quadkey_zoom=quadkey_zoom,
         asset_filter=asset_filter,
         accessor=path_accessor)
 

@@ -6,11 +6,12 @@ with open("README.md") as f:
     readme = f.read()
 
 # Runtime requirements.
-inst_reqs = ["numpy", "rasterio", "rio-tiler>=2.0a5"]
+inst_reqs = ["numpy", "rasterio", "rio-tiler>=2.0a6"]
 
 extra_reqs = {
-    "scripts": [
-        "click", "cogeo_mosaic", "python-dateutil", "requests", "shapely"]}
+    "cli": [
+        "boto3", "click", "cogeo_mosaic", "geopandas", "mercantile", "pandas",
+        "python-dateutil", "requests", "shapely"]}
 
 setup(
     name="usgs-topo-tiler",
@@ -25,12 +26,14 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
-        "Topic :: Scientific/Engineering :: GIS", ],
+        "Topic :: Scientific/Engineering :: GIS"],
     keywords="COG cogeo usgs topo raster map tiler gdal rasterio",
     author="Kyle Barron",
     author_email="kylebarron2@gmail.com",
     url="https://github.com/kylebarron/usgs-topo-tiler",
     license="MIT",
+    entry_points={
+        'console_scripts': ['usgs-topo-tiler=usgs_topo_tiler.cli:main', ], },
     packages=find_packages(
         exclude=["ez_setup", "scripts", "examples", "tests"]),
     include_package_data=True,

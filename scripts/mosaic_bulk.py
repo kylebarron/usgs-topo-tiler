@@ -8,6 +8,8 @@ import pandas as pd
 from cogeo_mosaic.mosaic import MosaicJSON
 from cogeo_mosaic.utils import _intersect_percent
 from pygeos import polygons
+from pygeos.measurement import area
+from pygeos.set_operations import difference
 from rio_tiler.mercator import zoom_for_pixelsize
 from shapely.geometry import asShape, box
 
@@ -149,7 +151,8 @@ def main(
         maxzoom = gdf.apply(
             lambda row: get_maxzoom(row['scale'], row['scanner_resolution']),
             axis=1)
-        maxzoom = round(maxzoom.median())
+        # Take 75th percentile of maxzoom series
+        maxzoom = int(round(maxzoom.describe()['75%']))
     if not minzoom:
         minzoom = maxzoom - 5
 
@@ -195,15 +198,45 @@ def asset_filter(tile, intersect_dataset, intersect_geoms, **kwargs):
     # Take highest preference within each group formed by cell_id
     gdf = gdf.groupby('cell_id').head(1)
 
-    # Find intersection percent
+    return optimize_assets(tile, gdf).__geo_interface__['features']
+
+
+def optimize_assets(tile, gdf):
+    """Try to find the minimal number of assets to cover tile
+
+    This optimization implies _both_ that
+
+    - assets will be ordered in the MosaicJSON in order of sort of the entire tile
+    - the total number of assets is kept to a minimum
+
+    Computing the absolute minimum of assets to cover the tile may not in
+    general be possible in finite time, so this is a naive method that should
+    work relatively well for this use case.
+    """
+    final_assets = []
     tile_geom = polygons(mercantile.feature(tile)['geometry']['coordinates'][0])
-    gdf['int_pct'] = _intersect_percent(tile_geom, gdf['intersect_geoms'])
 
-    # Sort on intersection percent
-    gdf = gdf.sort_values('int_pct', ascending=False)
+    while True:
+        # Find intersection percent
+        gdf['int_pct'] = _intersect_percent(tile_geom, gdf['intersect_geoms'])
 
-    # Return geojson features
-    return gdf.__geo_interface__['features']
+        # Sort by cover of region of tile that is left
+        # Sort first on scale, then on intersection percent
+        gdf = gdf.sort_values(['scale', 'int_pct'], ascending=[True, False])
+
+        # Remove top asset and add to final_assets
+        top_asset = gdf.iloc[0]
+        gdf = gdf.iloc[1:]
+        final_assets.append(top_asset)
+
+        # Recompute tile_geom, removing overlap with top_asset
+        tile_geom = difference(tile_geom, top_asset['intersect_geoms'])
+
+        # When total area is covered, stop
+        if area(tile_geom) - 1e-4 < 0:
+            break
+
+    return gpd.GeoDataFrame(final_assets)
 
 
 def load_s3_list(s3_list_path):

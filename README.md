@@ -32,32 +32,6 @@ There are three parts to serving your own tiles:
 
 [usgs-topo-mosaic]: https://github.com/kylebarron/usgs-topo-mosaic.
 
-### Removing map collars
-
-All of the USGS historical maps have _collars_, regions of space around the map
-where metadata is printed. In order to create continuous map tiles from a
-collection of these maps, these collars have to be clipped, so that only the map
-is showing.
-
-![Ruby, AK](assets/ruby_ak.png)
-
-These maps are georeferenced, which means that it's straightforward to remove
-the collar when you know the actual bounds contained in the map. However, I've
-found that there's no reliable way to determine the bounds on the fly with just
-the image and its filename.
-
-While building the mosaic ahead of time, you have access to this information,
-but with the usual tiling setup, you'd only have access to the URL and image
-while tiling.
-
-To get around this, I apply a "hack" to the MosaicJSON format. Instead of just
-encoding a URL string, I encode the url _and_ the bounds of the map as a JSON
-string.
-
-**Summary**: when you build a mosaic using the cli in this library, it encodes a
-*non-standard MosaicJSON that works well with the `usgs-mosaic-tiler` tiler, but
-*isn't necessarily readable by other MosaicJSON tools
-
 ## Generate a Web Mercator tile
 
 ### Install
@@ -186,3 +160,31 @@ usgs-topo-tiler list-s3 \
 _183112_ COG files!
 
 ```
+
+## Addendum
+
+### Removing map collars
+
+All of the USGS historical maps have _collars_, regions of space around the map
+where metadata is printed. In order to create continuous map tiles from a
+collection of these maps, these collars have to be clipped, so that only the map
+is showing.
+
+![Ruby, AK](assets/ruby_ak.png)
+
+These maps are georeferenced, which means that it's straightforward to remove
+the collar when you know the actual bounds contained in the map. However, I've
+found that there's no reliable way to determine the bounds on the fly with just
+the image and its filename.
+
+While building the mosaic ahead of time, you have access to this information,
+but with the usual tiling setup, you'd only have access to the URL and image
+while tiling.
+
+To get around this, I apply a "hack" to the MosaicJSON format. Instead of just
+encoding a URL string, I encode the url _and_ the bounds of the map as a JSON
+string.
+
+**Summary**: when you build a mosaic using the cli in this library, it encodes a
+non-standard MosaicJSON that works well with the `usgs-mosaic-tiler` tiler, but
+isn't necessarily readable by other MosaicJSON tools

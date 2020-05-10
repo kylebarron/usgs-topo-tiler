@@ -14,8 +14,6 @@ from rio_tiler.mercator import zoom_for_pixelsize
 from shapely.geometry import asShape, box
 
 
-
-
 @click.command()
 @click.option(
     '--meta-path',
@@ -169,8 +167,6 @@ def main(
         accessor=path_accessor)
 
     print(json.dumps(mosaic.dict(), separators=(',', ':')))
-
-
 
 
 def path_accessor(feature):

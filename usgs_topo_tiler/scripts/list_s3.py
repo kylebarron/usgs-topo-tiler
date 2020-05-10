@@ -27,7 +27,7 @@ import click
     help=
     'Suffix/file extension to filter for. To turn off filtering, pass None or an empty string'
 )
-def main(bucket, prefix, ext):
+def list_s3(bucket, prefix, ext):
     """Get listing of files on S3 with prefix and extension
     """
     s3 = boto3.resource('s3')
@@ -53,4 +53,4 @@ def main(bucket, prefix, ext):
 
 
 if __name__ == '__main__':
-    main()
+    list_s3()

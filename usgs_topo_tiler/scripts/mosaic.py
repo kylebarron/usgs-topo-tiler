@@ -71,7 +71,7 @@ def asset_filter(tile, intersect_dataset, intersect_geoms, **kwargs):
     show_default=True,
     help='Perform HEAD request on every selected image to ensure it exists')
 @click.argument('file', type=click.File())
-def main(preference, check_exists, file):
+def mosaic(preference, check_exists, file):
     features = load_features(file)
     mosaic = MosaicJSON.from_features(
         features,
@@ -100,4 +100,4 @@ def load_features(file):
 
 
 if __name__ == '__main__':
-    main()
+    mosaic()

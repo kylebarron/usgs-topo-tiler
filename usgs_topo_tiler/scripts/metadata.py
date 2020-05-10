@@ -14,7 +14,7 @@ import requests
     show_default=True,
     type=str,
     help='Bounding box. Must be provided in a string as "minx,miny,maxx,maxy"')
-def main(bbox):
+def metadata(bbox):
     """Download Topo metadata
     """
     url = 'http://viewer.nationalmap.gov/tnmaccess/api/products'
@@ -46,4 +46,4 @@ def main(bbox):
 
 
 if __name__ == '__main__':
-    main()
+    metadata()

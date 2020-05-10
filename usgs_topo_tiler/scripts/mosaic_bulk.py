@@ -113,7 +113,7 @@ from shapely.geometry import asShape, box
     'Output filtered GeoJSON features, without creating the MosaicJSON. Useful for inspecting the footprints ',
     default=False,
     show_default=True)
-def main(
+def mosaic_bulk(
         meta_path, s3_list_path, min_scale, max_scale, min_year, max_year,
         woodland_tint, allow_orthophoto, bounds, minzoom, maxzoom, quadkey_zoom,
         sort_preference, closest_to_year, filter_only):
@@ -357,4 +357,4 @@ def get_maxzoom(scale, dpi, tilesize=512):
 
 
 if __name__ == '__main__':
-    main()
+    mosaic_bulk()

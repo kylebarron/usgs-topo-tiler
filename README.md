@@ -159,6 +159,89 @@ usgs-topo-tiler list-s3 \
 
 _183112_ COG files!
 
+### Create MosaicJSON
+
+Now you're ready to start creating mosaics. This isn't entirely straightforward
+because maps were created at different times and at different scales in
+different regions of the U.S. So it's not usually as simple as creating a mosaic
+of all maps of a single scale, unless you're ok with having gaps in the mosaic
+spatially, where tiles might return empty data.
+
+#### Footprints
+
+One of the best way to visually see the results of a filtering query on the
+metadata is to generate _footprints_ and then display them on a map.
+
+Lets say we want to create a mosaic of mid-scale maps. We can use the
+`--filter-only` cli flag to export newline-delimited GeoJSON of the query.
+
+```bash
+usgs-topo-tiler mosaic-bulk \
+    --meta-path data/topomaps_all.csv \
+    --s3-list-path data/geotiff_files.txt \
+    --min-scale 63360 \
+    --max-scale 249000 \
+    --filter-only \
+    > mid_scale_footprints.geojsonl
+```
+
+Then we can visualize this data, e.g. with [my CLI][keplergl_cli] for
+[kepler.gl][keplergl].
+
+[keplergl]: https://kepler.gl/
+[keplergl_cli]: https://github.com/kylebarron/keplergl_cli
+
+```bash
+kepler mid_scale_footprints.geojsonl
+```
+
+This illustrates the core problem of these historical maps when making a
+MosaicJSON. Some areas have been mapped more than others, and some have never
+been mapped at this scale range. If you were to create a MosaicJSON from these
+parameters, you'd get empty images when requesting data over northern Montana.
+
+![](assets/mid_scale_footprints.png)
+
+#### API
+
+```
+Usage: usgs-topo-tiler mosaic-bulk [OPTIONS]
+
+  Create MosaicJSON from CSV of bulk metadata
+
+Options:
+  --meta-path PATH                Path to csv file of USGS bulk metadata dump
+                                  from S3  [required]
+
+  --s3-list-path PATH             Path to txt file of list of s3 GeoTIFF files
+  --min-scale FLOAT               Minimum map scale, inclusive
+  --max-scale FLOAT               Maximum map scale, inclusive
+  --min-year FLOAT                Minimum map year, inclusive
+  --max-year FLOAT                Maximum map year, inclusive
+  --woodland-tint / --no-woodland-tint
+                                  Filter on woodland tint or no woodland tint.
+                                  By default no filtering is applied.
+
+  --allow-orthophoto              Allow orthophoto  [default: False]
+  --bounds TEXT                   Bounding box for mosaic. Must be of format
+                                  "minx,miny,maxx,maxy"
+
+  -z, --minzoom INTEGER           Force mosaic minzoom
+  -Z, --maxzoom INTEGER           Force mosaic maxzoom
+  --quadkey-zoom INTEGER          Force mosaic quadkey zoom
+  --sort-preference [newest|oldest|closest-to-year]
+                                  Method for choosing assets within a given
+                                  mercator tile at the quadkey zoom.
+                                  [default: newest]
+
+  --closest-to-year INTEGER       Year used for comparisons when preference is
+                                  closest-to-year.
+
+  --filter-only                   Output filtered GeoJSON features, without
+                                  creating the MosaicJSON. Useful for
+                                  inspecting the footprints   [default: False]
+
+  --help                          Show this message and exit.
 ```
 
 ## Addendum

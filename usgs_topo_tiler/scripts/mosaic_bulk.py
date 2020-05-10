@@ -117,6 +117,8 @@ def mosaic_bulk(
         meta_path, s3_list_path, min_scale, max_scale, min_year, max_year,
         woodland_tint, allow_orthophoto, bounds, minzoom, maxzoom, quadkey_zoom,
         sort_preference, closest_to_year, filter_only):
+    """Create MosaicJSON from CSV of bulk metadata
+    """
     if (sort_preference == 'closest-to-year') and (not closest_to_year):
         msg = 'closest-to-year parameter required when sort-preference is closest-to-year'
         raise ValueError(msg)

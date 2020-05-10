@@ -236,6 +236,12 @@ def optimize_assets(tile, gdf):
         if area(tile_geom) - 1e-4 < 0:
             break
 
+        if len(gdf) == 0:
+            # There are many ocean/border tiles on the edges of available maps
+            # that by definition don't have full coverage
+            # print(f'Not enough assets to cover {tile}', file=sys.stderr)
+            break
+
     return gpd.GeoDataFrame(final_assets)
 
 

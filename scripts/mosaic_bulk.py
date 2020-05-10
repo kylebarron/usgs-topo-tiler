@@ -11,11 +11,7 @@ from pygeos import polygons
 from rio_tiler.mercator import zoom_for_pixelsize
 from shapely.geometry import asShape, box
 
-path = '../data/topomaps_all/topomaps_all.csv'
-s3_list_path = '../data/geotiff_files.txt'
 
-# TODO: option for high scale, medium scale, low scale
-# High scale: 24k, Medium scale: 63k, low scale: 250k
 
 
 @click.command()
@@ -129,13 +125,15 @@ def main(
         bbox = box(*map(float, bbox.split(',')))
         gdf = gdf[gdf.geometry.intersects(bbox)]
 
-    low_scale = gdf[gdf['scale'] >= 250000]
-    features = low_scale.__geo_interface__['features']
-    maxzoom = low_scale.apply(
+    maxzoom = gdf.apply(
         lambda row: get_maxzoom(row['scale'], row['scanner_resolution']),
         axis=1)
     maxzoom = round(maxzoom.mean())
     minzoom = maxzoom - 5
+
+    # Convert to features
+    cols = ['scale', 'year', 's3_tif', 'geometry', 'cell_id']
+    features = gdf[cols].__geo_interface__['features']
 
     mosaic = MosaicJSON.from_features(
         features,
@@ -146,14 +144,7 @@ def main(
 
     print(json.dumps(mosaic.dict(), separators=(',', ':')))
 
-    # Filter (sort) by desired scale
-    # What to do when assets don't exist for a given scale?
-    # Maybe decide on bins for high/medium/low scale and then plot footprints?
 
-    # Zoom ranges for high/medium/low?
-
-    # Separate mosaics for continental U.S. and Alaska? Might have different
-    # zoom ranges?
 
 
 def path_accessor(feature):

@@ -6,10 +6,6 @@ import geopandas as gpd
 import mercantile
 import pandas as pd
 from cogeo_mosaic.mosaic import MosaicJSON
-from cogeo_mosaic.utils import _intersect_percent
-from pygeos import polygons
-from pygeos.measurement import area
-from pygeos.set_operations import difference
 from rio_tiler.mercator import zoom_for_pixelsize
 from shapely.geometry import asShape, box
 
@@ -246,11 +242,12 @@ def optimize_assets(tile, gdf):
     work relatively well for this use case.
     """
     final_assets = []
-    tile_geom = polygons(mercantile.feature(tile)['geometry']['coordinates'][0])
+    tile_geom = asShape(mercantile.feature(tile)['geometry'])
 
     while True:
         # Find intersection percent
-        gdf['int_pct'] = _intersect_percent(tile_geom, gdf['intersect_geoms'])
+        gdf['int_pct'] = gdf.geometry.intersection(
+            tile_geom).area / tile_geom.area
 
         # Sort by cover of region of tile that is left
         # Sort first on scale, then on intersection percent
@@ -262,10 +259,10 @@ def optimize_assets(tile, gdf):
         final_assets.append(top_asset)
 
         # Recompute tile_geom, removing overlap with top_asset
-        tile_geom = difference(tile_geom, top_asset['intersect_geoms'])
+        tile_geom = tile_geom.difference(top_asset.geometry)
 
         # When total area is covered, stop
-        if area(tile_geom) - 1e-4 < 0:
+        if tile_geom.area - 1e-4 < 0:
             break
 
         if len(gdf) == 0:

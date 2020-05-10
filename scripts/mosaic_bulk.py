@@ -252,3 +252,5 @@ def get_maxzoom(scale, dpi, tilesize=512):
     return zoom_for_pixelsize(m_per_pixel, tilesize=tilesize)
 
 
+if __name__ == '__main__':
+    main()

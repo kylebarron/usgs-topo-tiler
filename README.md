@@ -325,7 +325,7 @@ where metadata is printed. In order to create continuous map tiles from a
 collection of these maps, these collars have to be clipped, so that only the map
 is showing.
 
-![Ruby, AK](assets/ruby_ak.png)
+![Ruby, AK](assets/ruby_ak.jpg)
 
 These maps are georeferenced, which means that it's straightforward to remove
 the collar when you know the actual bounds contained in the map. However, I've

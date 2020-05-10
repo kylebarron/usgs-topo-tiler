@@ -3,10 +3,13 @@ from urllib.parse import unquote
 
 import click
 import geopandas as gpd
+import mercantile
 import pandas as pd
 from cogeo_mosaic.mosaic import MosaicJSON
+from cogeo_mosaic.utils import _intersect_percent
+from pygeos import polygons
 from rio_tiler.mercator import zoom_for_pixelsize
-from shapely.geometry import box, asShape
+from shapely.geometry import asShape, box
 
 path = '../data/topomaps_all/topomaps_all.csv'
 s3_list_path = '../data/geotiff_files.txt'
@@ -138,7 +141,7 @@ def main(
         features,
         minzoom=minzoom,
         maxzoom=maxzoom,
-        # asset_filter=asset_filter,
+        asset_filter=asset_filter,
         accessor=path_accessor)
 
     print(json.dumps(mosaic.dict(), separators=(',', ':')))
@@ -159,6 +162,34 @@ def path_accessor(feature):
     map_bounds = asShape(feature['geometry']).bounds
     data = {'url': url, 'map_bounds': map_bounds}
     return json.dumps(data, separators=(',', ':'))
+
+
+def asset_filter(tile, intersect_dataset, intersect_geoms, **kwargs):
+    """Custom filter
+    """
+    # preference = kwargs.get('preference', ['scale', 'latest'])
+    sort_by = kwargs.get('sort_by', ['scale', 'year'])
+    sort_ascending = kwargs.get('sort_ascending', [True, False])
+
+    # Create GeoDataFrame
+    gdf = gpd.GeoDataFrame.from_features(intersect_dataset)
+    gdf['intersect_geoms'] = intersect_geoms
+
+    # Sort by preference
+    gdf = gdf.sort_values(sort_by, ascending=sort_ascending)
+
+    # Take highest preference within each group formed by cell_id
+    gdf = gdf.groupby('cell_id').head(1)
+
+    # Find intersection percent
+    tile_geom = polygons(mercantile.feature(tile)['geometry']['coordinates'][0])
+    gdf['int_pct'] = _intersect_percent(tile_geom, gdf['intersect_geoms'])
+
+    # Sort on intersection percent
+    gdf = gdf.sort_values('int_pct', ascending=False)
+
+    # Return geojson features
+    return gdf.__geo_interface__['features']
 
 
 def load_s3_list(s3_list_path):

@@ -6,6 +6,11 @@ maps.
 
 [mosaicjson]: https://github.com/developmentseed/mosaicjson-spec/
 
+![Grand Canyon Historical Mosaic](assets/grca_mosaic.jpg)
+
+A mosaic of USGS historical maps around the Grand Canyon, with added relief
+shading.
+
 ## Overview
 
 I stumbled upon a hidden gem: the entire USGS historical topographic map

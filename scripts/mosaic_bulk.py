@@ -71,7 +71,7 @@ from shapely.geometry import asShape, box
     show_default=True,
 )
 @click.option(
-    '--bbox',
+    '--bounds',
     type=str,
     default=None,
     show_default=True,
@@ -96,9 +96,28 @@ from shapely.geometry import asShape, box
     default=None,
     show_default=True,
     help='Force mosaic quadkey zoom')
+@click.option(
+    '--sort-preference',
+    type=click.Choice(['newest', 'oldest', 'closest-to-year'],
+                      case_sensitive=False),
+    default='newest',
+    show_default=True,
+    help=
+    'Method for choosing assets within a given mercator tile at the quadkey zoom.'
+)
+@click.option(
+    '--closest-to-year',
+    type=int,
+    default=None,
+    help='Year used for comparisons when preference is closest-to-year.')
 def main(
         meta_path, s3_list_path, min_scale, max_scale, min_year, max_year,
-        woodland_tint, allow_orthophoto, bbox, minzoom, maxzoom, quadkey_zoom):
+        woodland_tint, allow_orthophoto, bounds, minzoom, maxzoom, quadkey_zoom,
+        sort_preference, closest_to_year):
+    if (sort_preference == 'closest-to-year') and (not closest_to_year):
+        msg = 'closest-to-year parameter required when sort-preference is closest-to-year'
+        raise ValueError(msg)
+
     df = pd.read_csv(meta_path, low_memory=False)
     # Rename column names to lower case and snake case
     df = df.rename(columns=lambda col: col.lower().replace(' ', '_'))
@@ -141,9 +160,9 @@ def main(
     gdf = gpd.GeoDataFrame(df)
 
     # Filter within provided bounding box
-    if bbox:
-        bbox = box(*map(float, bbox.split(',')))
-        gdf = gdf[gdf.geometry.intersects(bbox)]
+    if bounds:
+        bounds = box(*map(float, bounds.split(',')))
+        gdf = gdf[gdf.geometry.intersects(bounds)]
 
     if not maxzoom:
         maxzoom = gdf.apply(
@@ -154,8 +173,23 @@ def main(
     if not minzoom:
         minzoom = maxzoom - 5
 
-    # Convert to features
+    # Columns to keep for creating MosaicJSON
     cols = ['scale', 'year', 's3_tif', 'geometry', 'cell_id']
+
+    if sort_preference == 'newest':
+        sort_by = ['scale', 'year']
+        sort_ascending = [True, False]
+    elif sort_preference == 'oldest':
+        sort_by = ['scale', 'year']
+        sort_ascending = [True, True]
+    elif sort_preference == 'closest-to-year':
+        gdf['reference_year'] = (closest_to_year - gdf['year']).abs()
+        sort_by = ['scale', 'reference_year']
+        sort_ascending = [True, True]
+        cols.remove('year')
+        cols.append('reference_year')
+
+    # Convert to features
     features = gdf[cols].__geo_interface__['features']
 
     mosaic = MosaicJSON.from_features(
@@ -164,7 +198,9 @@ def main(
         maxzoom=maxzoom,
         quadkey_zoom=quadkey_zoom,
         asset_filter=asset_filter,
-        accessor=path_accessor)
+        accessor=path_accessor,
+        sort_by=sort_by,
+        sort_ascending=sort_ascending)
 
     print(json.dumps(mosaic.dict(), separators=(',', ':')))
 

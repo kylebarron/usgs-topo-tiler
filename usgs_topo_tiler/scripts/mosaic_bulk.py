@@ -264,6 +264,9 @@ def optimize_assets(tile, gdf):
         gdf['int_pct'] = gdf.geometry.intersection(
             tile_geom).area / tile_geom.area
 
+        # Remove features with no tile overlap
+        gdf = gdf[gdf['int_pct'] > 0]
+
         # Sort by cover of region of tile that is left
         # Sort first on scale, then on intersection percent
         gdf = gdf.sort_values(['scale', 'int_pct'], ascending=[True, False])

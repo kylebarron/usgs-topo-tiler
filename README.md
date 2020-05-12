@@ -35,7 +35,7 @@ There are three parts to serving your own tiles:
 - `usgs-topo-tiler`'s CLI, which helps to construct MosaicJSON files. These files tell `usgs-topo-mosaic` what source files should be combined to create a single Web Mercator tile.
 - [`usgs-topo-mosaic`][usgs-topo-mosaic]: a library to use a MosaicJSON file created above to create a seamless mosaic of tiles. This is designed to be deployed with AWS Lambda and AWS API Gateway as a serverless tile endpoint.
 
-[usgs-topo-mosaic]: https://github.com/kylebarron/usgs-topo-mosaic.
+[usgs-topo-mosaic]: https://github.com/kylebarron/usgs-topo-mosaic
 
 ## Generate a Web Mercator tile
 

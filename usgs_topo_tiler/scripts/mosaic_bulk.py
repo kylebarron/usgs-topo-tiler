@@ -182,14 +182,14 @@ def mosaic_bulk(
     cols = ['scale', 'year', 's3_tif', 'geometry', 'cell_id']
 
     if sort_preference == 'newest':
-        sort_by = ['scale', 'year']
-        sort_ascending = [True, False]
+        sort_by = ['year', 'scale']
+        sort_ascending = [False, True]
     elif sort_preference == 'oldest':
-        sort_by = ['scale', 'year']
+        sort_by = ['year', 'scale']
         sort_ascending = [True, True]
     elif sort_preference == 'closest-to-year':
         gdf['reference_year'] = (closest_to_year - gdf['year']).abs()
-        sort_by = ['scale', 'reference_year']
+        sort_by = ['reference_year', 'scale']
         sort_ascending = [True, True]
         cols.remove('year')
         cols.append('reference_year')
@@ -233,7 +233,6 @@ def asset_filter(tile, intersect_dataset, intersect_geoms, **kwargs):
 
     # Create GeoDataFrame
     gdf = gpd.GeoDataFrame.from_features(intersect_dataset)
-    gdf['intersect_geoms'] = intersect_geoms
 
     # Sort by preference
     gdf = gdf.sort_values(sort_by, ascending=sort_ascending)
@@ -241,10 +240,12 @@ def asset_filter(tile, intersect_dataset, intersect_geoms, **kwargs):
     # Take highest preference within each group formed by cell_id
     gdf = gdf.groupby('cell_id').head(1)
 
-    return optimize_assets(tile, gdf).__geo_interface__['features']
+    assets = optimize_assets(tile, gdf, sort_by, sort_ascending)
+    if len(assets):
+        return assets.__geo_interface__['features']
 
 
-def optimize_assets(tile, gdf):
+def optimize_assets(tile, gdf, sort_by, sort_ascending):
     """Try to find the minimal number of assets to cover tile
 
     This optimization implies _both_ that
@@ -259,6 +260,16 @@ def optimize_assets(tile, gdf):
     final_assets = []
     tile_geom = asShape(mercantile.feature(tile)['geometry'])
 
+    sort_by = sort_by.copy()
+    sort_ascending = sort_ascending.copy()
+
+    msg = 'sort_by, sort_ascending must be same length'
+    assert len(sort_by) == len(sort_ascending), msg
+
+    if 'int_pct' not in sort_by:
+        sort_by.append('int_pct')
+        sort_ascending.append(False)
+
     while True:
         # Find intersection percent
         gdf['int_pct'] = gdf.geometry.intersection(
@@ -267,9 +278,15 @@ def optimize_assets(tile, gdf):
         # Remove features with no tile overlap
         gdf = gdf[gdf['int_pct'] > 0]
 
+        if len(gdf) == 0:
+            # There are many ocean/border tiles on the edges of available maps
+            # that by definition don't have full coverage
+            # print(f'Not enough assets to cover {tile}', file=sys.stderr)
+            break
+
         # Sort by cover of region of tile that is left
         # Sort first on scale, then on intersection percent
-        gdf = gdf.sort_values(['scale', 'int_pct'], ascending=[True, False])
+        gdf = gdf.sort_values(sort_by, ascending=sort_ascending)
 
         # Remove top asset and add to final_assets
         top_asset = gdf.iloc[0]

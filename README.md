@@ -6,7 +6,9 @@ maps.
 
 [mosaicjson]: https://github.com/developmentseed/mosaicjson-spec/
 
-![Grand Canyon Historical Mosaic](assets/grca_mosaic.jpg)
+![Grand Canyon Historical Mosaic][grca_mosaic]
+
+[grca_mosaic]: https://raw.githubusercontent.com/kylebarron/usgs-topo-tiler/master/assets/grca_mosaic.jpg
 
 A mosaic of USGS historical maps around the Grand Canyon, with added relief
 shading.
@@ -97,7 +99,9 @@ You now have a 512x512 png image aligned with the Web Mercator grid, and because
 the source is a _Cloud-optimized_ GeoTIFF, the image was made with a minimal
 number of requests to the source, and without reading the entire GeoTIF.
 
-![Yosemite, 1897 Web Mercator tile](assets/yose_1897.png)
+![Yosemite, 1897 Web Mercator tile][yose_1897]
+
+[yose_1897]: https://github.com/kylebarron/usgs-topo-tiler/blob/master/assets/yose_1897.png?raw=true
 
 ## Create a MosaicJSON
 
@@ -206,7 +210,9 @@ been mapped at this scale range. If you were to create a MosaicJSON from these
 parameters, you'd get empty images when requesting data over Northern Montana
 and Western Texas.
 
-![](assets/mid_scale_footprints.png)
+![][mid_scale_footprints]
+
+[mid_scale_footprints]: https://github.com/kylebarron/usgs-topo-tiler/blob/master/assets/mid_scale_footprints.png?raw=true
 
 #### Generate MosaicJSON
 
@@ -325,7 +331,9 @@ where metadata is printed. In order to create continuous map tiles from a
 collection of these maps, these collars have to be clipped, so that only the map
 is showing.
 
-![Ruby, AK](assets/ruby_ak.jpg)
+![Ruby, AK][ruby_ak]
+
+[ruby_ak]: https://github.com/kylebarron/usgs-topo-tiler/blob/master/assets/ruby_ak.jpg?raw=true
 
 These maps are georeferenced, which means that it's straightforward to remove
 the collar when you know the actual bounds contained in the map. However, I've
